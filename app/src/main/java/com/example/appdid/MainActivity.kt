@@ -9,10 +9,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var btn2=findViewById<Button>(R.id.btn_2)
 
-        btn2.setOnClickListener {
-            Toast.makeText(applicationContext,"Hello",Toast.LENGTH_SHORT).show()
-        }
     }
 }
