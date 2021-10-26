@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AppDid</string>
+    <string name="app_bar_title">DID</string>
 </resources>

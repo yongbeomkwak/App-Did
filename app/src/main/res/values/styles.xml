@@ -9,7 +9,7 @@
         <item name="colorSecondary">@color/secondary_color</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/primary_color</item>
+        <item name="android:statusBarColor" tools:targetApi="l">#9A0C8EF1</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>
