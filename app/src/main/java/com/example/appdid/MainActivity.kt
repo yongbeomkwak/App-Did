@@ -3,8 +3,11 @@ package com.example.appdid
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.widget.Button
+import android.widget.ExpandableListAdapter
 import android.widget.Toast
+import androidx.core.view.GravityCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.appdid.bottomNavigation.Selected
 import com.example.appdid.databinding.ActivityMainBinding
@@ -20,9 +23,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
         viewPager2Init()
+        setExpandableList()
+
+        binding.apaBar.setNavigationOnClickListener {  //햄버거 메뉴 클릭시 SideBar 나오기
+            if(binding.dlContainer.isDrawerOpen(GravityCompat.START))
+            {
+                binding.dlContainer.closeDrawer(GravityCompat.START)
+            }
+            else
+            {
+                binding.dlContainer.openDrawer(GravityCompat.START)
+            }
+
+        }
     }
 
     fun viewPager2Init() {   // ViewPager2 이니셜라이저
@@ -52,5 +69,24 @@ class MainActivity : AppCompatActivity() {
                 true
             }
         }
+    }
+
+    private fun  setExpandableList() //리스트 이니셜라이저
+    {
+        val parentsList= mutableListOf<String>("부모1","부모2","부모3")
+        val childList = mutableListOf( mutableListOf(), mutableListOf("자식 1", "자식 2"), mutableListOf("자식 1", "자식 2", "자식 3") )
+        val expandableListAdapter=com.example.appdid.expandableList.ExpandableListAdapter(this,parentsList,childList)
+        binding.elMenu.setAdapter(expandableListAdapter)
+        binding.elMenu.setOnGroupClickListener { parent, v, groupPosition, id ->
+            //TODO
+            println("Click group")
+            false
+        }
+        binding.elMenu.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
+            //TODO
+            println("Click child")
+            false
+        }
+
     }
 }
