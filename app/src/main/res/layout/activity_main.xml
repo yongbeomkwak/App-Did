@@ -27,19 +27,18 @@
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.viewpager.widget.ViewPager
-
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </androidx.viewpager.widget.ViewPager>
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottomNaviView"
+        android:layout_below="@+id/coordinator"
+        android:layout_centerHorizontal="true">
 
-
+    </androidx.viewpager2.widget.ViewPager2>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNaviView"
