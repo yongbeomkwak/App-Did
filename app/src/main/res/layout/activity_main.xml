@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:id="@+id/dlContainer"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    >
 
 
 
@@ -14,38 +15,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:id="@+id/coordinator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
+        <include
+            android:id="@+id/incAppBar"
+            layout="@layout/app_bar_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/apaBar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:titleCentered="true"
-                app:title="@string/app_bar_title"
-                app:titleTextColor="@color/white"
-                app:navigationIcon="@drawable/ic_menu_24"
-                app:menu="@menu/appbar_menu">
+        </include>
 
-            </com.google.android.material.appbar.MaterialToolbar>
-        </com.google.android.material.appbar.AppBarLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
     <androidx.viewpager2.widget.ViewPager2
-        app:layout_constraintTop_toBottomOf="@id/coordinator"
+        app:layout_constraintTop_toBottomOf="@id/incAppBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/view_pager"
@@ -75,18 +58,36 @@
 
 
     <com.google.android.material.navigation.NavigationView
+        android:fitsSystemWindows="true"
         android:id="@+id/nv_drawer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         >
-        <ExpandableListView
-            android:id="@+id/el_menu"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:groupIndicator="@null"
-            >
-        </ExpandableListView>
+            android:layout_height="match_parent">
+
+            <include
+                android:layout_marginTop="10dp"
+                android:layout_alignParentTop="true"
+                android:id="@+id/nav_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/navigation_header"
+                ></include>
+
+            <ExpandableListView
+                android:layout_below="@+id/nav_header"
+                android:id="@+id/el_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:groupIndicator="@null"
+
+                >
+            </ExpandableListView>
+        </RelativeLayout>
+
 
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
