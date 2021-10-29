@@ -4,13 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.widget.Button
 import android.widget.ExpandableListAdapter
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.appdid.bottomNavigation.Selected
 import com.example.appdid.databinding.ActivityMainBinding
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -23,13 +26,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
+        val appbarView:View=findViewById(R.id.incAppBar) as View //include 태그 View를 가져오기 위함
+        val appBar:MaterialToolbar=appbarView.findViewById(R.id.appBar) as MaterialToolbar //include View에서 실제 appBar가져옴
+        setSupportActionBar(appBar) //ActionBar 등록
 
         viewPager2Init()
         setExpandableList()
 
-        binding.apaBar.setNavigationOnClickListener {  //햄버거 메뉴 클릭시 SideBar 나오기
+        appBar.setNavigationOnClickListener { //햄버거 메뉴 클릭 이벤트
             if(binding.dlContainer.isDrawerOpen(GravityCompat.START))
             {
                 binding.dlContainer.closeDrawer(GravityCompat.START)
@@ -38,7 +43,6 @@ class MainActivity : AppCompatActivity() {
             {
                 binding.dlContainer.openDrawer(GravityCompat.START)
             }
-
         }
     }
 

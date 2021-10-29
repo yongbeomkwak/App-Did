@@ -8,8 +8,9 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondary_color</item>
 
-        <!-- Status bar color. -->
+        <!-- Status bar color.  windowTranslucentStatus 투명 설정-->
         <item name="android:statusBarColor" tools:targetApi="l">#9A0C8EF1</item>
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
         <!-- Customize your theme here. -->
     </style>
 </resources>
