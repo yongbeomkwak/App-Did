@@ -1,7 +1,11 @@
 package com.example.appdid
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.media.ImageReader
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -26,6 +30,7 @@ import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.mikhaellopez.circularimageview.CircularImageView
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.net.URI
 import java.text.SimpleDateFormat
@@ -47,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         {
             if(it.resultCode== RESULT_OK)
             {
-                Toast.makeText(applicationContext, it.data?.getIntExtra("ret",0).toString(),Toast.LENGTH_SHORT).show()
+                setProfileImage()
             }
         }
     }
@@ -212,11 +217,50 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createImageFile(): File {
-        val timestamp:String=SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        //val timestamp:String=SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir:File?=getExternalFilesDir(Environment.DIRECTORY_PICTURES)// 저장 디렉토리 설정
-        return File.createTempFile("JPEG_${timestamp}_",".jpg",storageDir).apply { // 임시파일명:JPEG_날짜.jpg ,저장 경로(storageDir)
-            curPhotoPath=absolutePath
+        return File.createTempFile("JPEG_Profie_",".jpg",storageDir).apply { // 임시파일명:JPEG_날짜.jpg ,저장 경로(storageDir)
+            curPhotoPath=absolutePath //경로 저장 하기
         }
     }
 
+    private fun setProfileImage(){
+        val bitmap:Bitmap
+        val file=File(curPhotoPath)
+        if(Build.VERSION.SDK_INT<28)
+        {
+            bitmap=MediaStore.Images.Media.getBitmap(contentResolver,Uri.fromFile(file))
+            /*val w:Int = bitmap.getWidth()
+            val h:Int = bitmap.getHeight()
+            val boxWidth:Int = w/2
+            val boxHeight:Int = h/2;
+            bitmap= Bitmap.createBitmap(bitmap,boxWidth,boxHeight)*/
+            naviProfileImageView.setImageBitmap(bitmap)
+        }
+        else
+        {
+            val decode=ImageDecoder.createSource(
+                this.contentResolver,
+                Uri.fromFile(file)
+            )
+            bitmap=ImageDecoder.decodeBitmap(decode)
+            naviProfileImageView.setImageBitmap(bitmap)
+
+        }
+        savePhoto(bitmap) //저장
+    }
+    private fun savePhoto(bitmap: Bitmap)
+    {
+        val absolutePath = "/storage/emulated/0/"
+        val folderPath = "$absolutePath/pictures/"
+        val fileName="Profile.jpeg"
+        val folder=File(folderPath)
+        if(!folder.isDirectory) //현재 해당 경로에 폴더가 없다면
+        {
+            folder.mkdirs() //폴더를 만든다
+        }
+        val out =FileOutputStream(folderPath+fileName)
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,out)
+        Toast.makeText(applicationContext,"저장 완료",Toast.LENGTH_SHORT).show()
+    }
 }

@@ -29,3 +29,4 @@
     - 카메라 사용 함수 및 ted 권한 확인 함수
     - 카메라 촬영 및 해당 사진 저장을 위한 작업(manifest(provider) 및 res/xml 에 경로 지정)
     - 촬영함수(takeCapture)
+    - 사진 저장함수(SavePhoto)
