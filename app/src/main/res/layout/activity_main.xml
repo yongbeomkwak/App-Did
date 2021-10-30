@@ -59,6 +59,7 @@
 
 
     <com.google.android.material.navigation.NavigationView
+        android:background="@drawable/navi_border"
         android:fitsSystemWindows="true"
         android:id="@+id/nv_drawer"
         android:layout_width="wrap_content"
