@@ -18,3 +18,14 @@
     -   SideBar에 UserProfile header를 만듬 (navigation_header.xml)
     -   com.mikhaellopez.circularimageview.CircularImageView (implement 추가) 및 navigation_header.xml에 사용
     -   profile 구간 아직 완성하지 못함
+
+## 10/30
+    -   SideBar Profile CircularImageView ScaleType 지정 (navigation_header.xml)
+    -   manifest 외부저장소 접근 권한 명시
+    -   SideBar profile 이미지뷰 클릭 이벤트 리스너 등록
+    -   위험 퍼미션에 대한 팝업 ted:tedpermission:2.3.3' 등록 (manifest.xml)
+    -  퍼미션 체크함수(setPermission)
+    - 카메라 or 갤러이에서 데이터를 위한 Launch 생성(MainActivity.kt)
+    - 카메라 사용 함수 및 ted 권한 확인 함수
+    - 카메라 촬영 및 해당 사진 저장을 위한 작업(manifest(provider) 및 res/xml 에 경로 지정)
+    - 촬영함수(takeCapture)

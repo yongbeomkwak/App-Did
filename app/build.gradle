@@ -62,4 +62,8 @@ dependencies {
     implementation 'com.mikhaellopez:circularimageview:4.3.0'
 
 
+    // 위험 퍼미션에 대한 팝업
+    implementation 'gun0912.ted:tedpermission:2.2.3'
+
+
 }
