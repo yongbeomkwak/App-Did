@@ -30,6 +30,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.lang.Exception
+import java.lang.Integer.min
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -87,7 +88,9 @@ class MainActivity : AppCompatActivity() {
         naviProfileImageView=findViewById<CircularImageView>(R.id.civProfile)
 
 
-        //setSupportActionBar(appBar) //ActionBar 등록
+
+//        setSupportActionBar(appBar) //ActionBar 등록 (안보이는 오류로 인해 주석처리)
+
         viewPager2Init()
         setExpandableList()
         /*
@@ -258,6 +261,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setBitmapSquare(bitmap: Bitmap) : Bitmap{ // Bitmap이미지를 중앙 정렬 정사각형 이미지로 변경하는 함수
+        var w = bitmap.width
+        var h = bitmap.height
+
+        var x = w / 2
+        var y = h / 2
+
+        w = min(w, h)
+        h = min(w, h)
+
+        x -= w / 2
+        y -= h / 2
+
+        return Bitmap.createBitmap(bitmap, x, y, w, h)
+    }
+
     private fun setProfileImage(){
         val bitmap:Bitmap
         val file=File(curPhotoPath)
@@ -278,8 +297,8 @@ class MainActivity : AppCompatActivity() {
          * */
             var options: BitmapFactory.Options = BitmapFactory.Options()
             options.inSampleSize = 2 //1/N배로 크기를 줄여주는데 최솟값은 1이며 2의 거듭제곱을 값으로 주면 속도가 향상된다.
-            val width: Int = 85
-            val height: Int = 85
+            val width: Int = 170
+            val height: Int = 170
             var bmpWidth: Float = bitmap.width.toFloat()
             var bmpHeight: Float = bitmap.height.toFloat()
 
@@ -296,7 +315,7 @@ class MainActivity : AppCompatActivity() {
                 bmpHeight *= (scale / 100);
             }
 
-        val resizedBitmap:Bitmap=Bitmap.createScaledBitmap(bitmap,bmpWidth.toInt(),bmpHeight.toInt(),true) //Resize
+        val resizedBitmap:Bitmap=Bitmap.createScaledBitmap(setBitmapSquare(bitmap),bmpWidth.toInt(),bmpWidth.toInt(),true) //Resize
         naviProfileImageView.setImageBitmap(resizedBitmap) // 이미지 뷰에 설정
         savePhoto(resizedBitmap) //저장
     }
