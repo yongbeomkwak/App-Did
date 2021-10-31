@@ -2,23 +2,18 @@ package com.example.appdid
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
-import android.media.ImageReader
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
-import android.view.Gravity
 import android.view.View
-import android.widget.Button
-import android.widget.ExpandableListAdapter
-import android.widget.Toast
-import android.widget.Toolbar
+import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.view.GravityCompat
 import androidx.viewpager2.widget.ViewPager2
@@ -32,8 +27,6 @@ import com.mikhaellopez.circularimageview.CircularImageView
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.net.URI
-import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -42,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var view_pager2: ViewPager2 // 달력, todo리스트 화면전환을 위한 ViewPager2
     private lateinit var bottom_navi_view: BottomNavigationView // 화면전환 컨트롤을 위한 Navigation
     private lateinit var naviProfileImageView:CircularImageView //SideBar 프로필 이미지 뷰
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent,> // 콜백 Launch
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent> // 콜백 Launch
     private lateinit var curPhotoPath:String
     val REQUEST_IMAGE_CAPTURE:Int=1
 
@@ -143,9 +136,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun  setExpandableList() //리스트 이니셜라이저
     {
-        val parentsList= mutableListOf<String>("부모1","부모2","부모3")
-        val childList = mutableListOf( mutableListOf(), mutableListOf("자식 1", "자식 2"), mutableListOf("자식 1", "자식 2", "자식 3") )
-        val expandableListAdapter=com.example.appdid.expandableList.ExpandableListAdapter(this,parentsList,childList)
+        val parentsList= mutableListOf<String>("부모1", "부모2", "부모3")
+        val childList = mutableListOf(
+            mutableListOf(), mutableListOf("자식 1", "자식 2"), mutableListOf(
+                "자식 1",
+                "자식 2",
+                "자식 3"
+            )
+        )
+        val expandableListAdapter=com.example.appdid.expandableList.ExpandableListAdapter(
+            this,
+            parentsList,
+            childList
+        )
         binding.elMenu.setAdapter(expandableListAdapter)
         binding.elMenu.setOnGroupClickListener { parent, v, groupPosition, id ->
             //TODO
@@ -168,12 +171,12 @@ class MainActivity : AppCompatActivity() {
     {
         val permission=object :PermissionListener{
             override fun onPermissionGranted() { //권한을 설정 허가할 경우 수행되는 곳
-                Toast.makeText(applicationContext,"권한이 성공적으로 설정됬습니다..",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "권한이 성공적으로 설정됬습니다..", Toast.LENGTH_SHORT).show()
                 takeCapture()
             }
 
             override fun onPermissionDenied(deniedPermissions: MutableList<String>?) { //권한은 거부할 경우 수행 되는 곳
-                Toast.makeText(applicationContext,"권한을 거부 됬습니다.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "권한을 거부 됬습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -181,7 +184,10 @@ class MainActivity : AppCompatActivity() {
             .setPermissionListener(permission) //리스너 등록
             .setRationaleMessage("카메라 앱을 사용하시려면 권한을 허용 해 주세요") //허용 메시지
             .setDeniedMessage("권한을 거부 하셨습니다 [앱 설정] ->[권한] 항목에서 설정 허용해주세요.") // 거부 메시지
-            .setPermissions(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.CAMERA) //해당 권한 나열
+            .setPermissions(
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+            ) //해당 권한 나열
             .check()
     }
 
@@ -197,7 +203,7 @@ class MainActivity : AppCompatActivity() {
                 val photoFile:File? = try {
                     createImageFile() //이미지 파일 생성
 
-                } catch (e:IOException)
+                } catch (e: IOException)
                 {
                     println("Error 발생")
                     null
@@ -208,7 +214,7 @@ class MainActivity : AppCompatActivity() {
                         "com.example.appdid.fileprovider", // "packagename.fileprovider"
                         it!! //file
                     )
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI) //해당 uri로 이동
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI) //해당 uri로 이동
 
                     activityResultLauncher.launch(takePictureIntent)
                 }
@@ -219,7 +225,7 @@ class MainActivity : AppCompatActivity() {
     private fun createImageFile(): File {
         //val timestamp:String=SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir:File?=getExternalFilesDir(Environment.DIRECTORY_PICTURES)// 저장 디렉토리 설정
-        return File.createTempFile("JPEG_Profie_",".jpg",storageDir).apply { // 임시파일명:JPEG_날짜.jpg ,저장 경로(storageDir)
+        return File.createTempFile("JPEG_Profie_", ".jpg", storageDir).apply { // 임시파일명:JPEG_날짜.jpg ,저장 경로(storageDir)
             curPhotoPath=absolutePath //경로 저장 하기
         }
     }
@@ -227,27 +233,44 @@ class MainActivity : AppCompatActivity() {
     private fun setProfileImage(){
         val bitmap:Bitmap
         val file=File(curPhotoPath)
+
         if(Build.VERSION.SDK_INT<28)
         {
-            bitmap=MediaStore.Images.Media.getBitmap(contentResolver,Uri.fromFile(file))
-            /*val w:Int = bitmap.getWidth()
-            val h:Int = bitmap.getHeight()
-            val boxWidth:Int = w/2
-            val boxHeight:Int = h/2;
-            bitmap= Bitmap.createBitmap(bitmap,boxWidth,boxHeight)*/
-            naviProfileImageView.setImageBitmap(bitmap)
+            bitmap=MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
         }
-        else
-        {
-            val decode=ImageDecoder.createSource(
-                this.contentResolver,
-                Uri.fromFile(file)
+        else {
+            val decode = ImageDecoder.createSource(
+                    this.contentResolver,
+                    Uri.fromFile(file)
             )
-            bitmap=ImageDecoder.decodeBitmap(decode)
-            naviProfileImageView.setImageBitmap(bitmap)
-
+            bitmap = ImageDecoder.decodeBitmap(decode)
         }
-        savePhoto(bitmap) //저장
+        /**
+         *  Resize 구간
+         * */
+            var options: BitmapFactory.Options = BitmapFactory.Options()
+            options.inSampleSize = 2 //1/N배로 크기를 줄여주는데 최솟값은 1이며 2의 거듭제곱을 값으로 주면 속도가 향상된다.
+            val width: Int = 85
+            val height: Int = 85
+            var bmpWidth: Float = bitmap.width.toFloat()
+            var bmpHeight: Float = bitmap.height.toFloat()
+
+            if (bmpWidth > width) {
+                val mWidth = (bmpWidth / 100)
+                val scale = width / mWidth
+                bmpWidth *= scale / 100
+                bmpHeight *= scale / 100
+            } else if (bmpHeight > height) {
+                // 원하는 높이보다 클 경우의 설정
+                val mHeight = bmpHeight / 100;
+                val scale = height / mHeight;
+                bmpWidth *= (scale / 100);
+                bmpHeight *= (scale / 100);
+            }
+
+        val resizedBitmap:Bitmap=Bitmap.createScaledBitmap(bitmap,bmpWidth.toInt(),bmpHeight.toInt(),true) //Resize
+        naviProfileImageView.setImageBitmap(resizedBitmap) // 이미지 뷰에 설정
+        savePhoto(resizedBitmap) //저장
     }
     private fun savePhoto(bitmap: Bitmap)
     {
@@ -259,8 +282,14 @@ class MainActivity : AppCompatActivity() {
         {
             folder.mkdirs() //폴더를 만든다
         }
-        val out =FileOutputStream(folderPath+fileName)
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,out)
-        Toast.makeText(applicationContext,"저장 완료",Toast.LENGTH_SHORT).show()
+        if(File(folderPath+fileName).exists()) //파일 존재 시
+        {
+            File(folderPath+fileName).delete() //삭제
+            Toast.makeText(applicationContext, "삭제 완료", Toast.LENGTH_SHORT).show()
+
+        }
+        val out =FileOutputStream(folderPath + fileName)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+
     }
 }
