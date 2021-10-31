@@ -265,12 +265,13 @@ class MainActivity : AppCompatActivity() {
         /**
          *  Resize 구간
          * */
+            var squareBitmap = setBitmapSquare(bitmap)
             var options: BitmapFactory.Options = BitmapFactory.Options()
             options.inSampleSize = 2 //1/N배로 크기를 줄여주는데 최솟값은 1이며 2의 거듭제곱을 값으로 주면 속도가 향상된다.
             val width: Int = 170
             val height: Int = 170
-            var bmpWidth: Float = bitmap.width.toFloat()
-            var bmpHeight: Float = bitmap.height.toFloat()
+            var bmpWidth: Float = squareBitmap.width.toFloat()
+            var bmpHeight: Float = squareBitmap.height.toFloat()
 
             if (bmpWidth > width) {
                 val mWidth = (bmpWidth / 100)
@@ -285,9 +286,9 @@ class MainActivity : AppCompatActivity() {
                 bmpHeight *= (scale / 100);
             }
 
-        val resizedBitmap:Bitmap=Bitmap.createScaledBitmap(setBitmapSquare(bitmap),bmpWidth.toInt(),bmpWidth.toInt(),true) //Resize
+        val resizedBitmap:Bitmap=Bitmap.createScaledBitmap(squareBitmap,bmpWidth.toInt(),bmpWidth.toInt(),true) //Resize
         naviProfileImageView.setImageBitmap(resizedBitmap) // 이미지 뷰에 설정
-        savePhoto(resizedBitmap) //저장
+        savePhoto(squareBitmap) //저장
     }
     private fun savePhoto(bitmap: Bitmap)
     {
