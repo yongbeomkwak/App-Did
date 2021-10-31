@@ -33,3 +33,8 @@
     - SideBar 모서리 둥근 효과(drawable/navi_border.xml)
     - 프로필 이미지 중앙 정렬된 정사각형으로 변
     - 프로필 이미지 외부저장소 저장 화질 개선
+
+## 10/31
+    -   LoadPicture(갤러리 접근 함수)
+    -   OptionMenu 선택 이벤트 구간 만들기 구현은 나중
+    -   

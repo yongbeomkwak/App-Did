@@ -1,33 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
 
-    <TextView
-        android:id="@+id/tvTakePicture"
-        android:layout_marginTop="7dp"
-        android:paddingLeft="10dp"
+    <LinearLayout
+        android:id="@+id/llTakePicture"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="사진 촬영"
-        android:textStyle="bold"
-        android:layout_marginBottom="7dp"
-        ></TextView>
+        android:layout_height="60dp">
+        <TextView
+            android:id="@+id/tvTakePicture"
+            android:layout_marginTop="3dp"
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="사진 촬영"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:layout_marginBottom="3dp"
+            ></TextView>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvGallery"
-        android:layout_marginTop="7dp"
-        android:paddingLeft="10dp"
+    <LinearLayout
+        android:id="@+id/llGallery"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="엘범에서 가져오기"
-        android:textStyle="bold"
-        android:layout_marginBottom="7dp"
-        >
+        android:layout_height="60dp">
+        <TextView
+            android:id="@+id/tvGallery"
+            android:layout_marginTop="3dp"
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="앨범에서 가져오기"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:layout_marginBottom="3dp"
+            ></TextView>
+    </LinearLayout>
 
-    </TextView>
+
+
+
 
 
 

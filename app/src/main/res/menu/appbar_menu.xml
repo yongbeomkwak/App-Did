@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/app_bar_add"
+        android:id="@+id/app_bar_more"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_more_vert_24"
         android:title="more"></item>

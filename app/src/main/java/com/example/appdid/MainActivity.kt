@@ -20,6 +20,7 @@ import androidx.core.view.GravityCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.appdid.bottomNavigation.Selected
 import com.example.appdid.databinding.ActivityMainBinding
+import com.example.appdid.dialog.ProfileDialog
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gun0912.tedpermission.PermissionListener
@@ -41,8 +42,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var naviProfileImageView:CircularImageView //SideBar 프로필 이미지 뷰
     private lateinit var takePictureResultLauncher: ActivityResultLauncher<Intent> // 콜백 Launch
     private lateinit var loadPictureFromGalleryLauncher: ActivityResultLauncher<Intent> // 콜백 Launch
-    private lateinit var dialogProfileImage:Dialog //프로필 사진 다이얼로그
+    private lateinit var dialogProfile:ProfileDialog //프로필 사진 다이얼로그
     private lateinit var curPhotoPath:String
+    private val CODE_TAKE_PICTURE:Int=0
+    private val CODE_GALLERY_PICTURE:Int=1
 
 
     override fun onStart() {
@@ -75,6 +78,11 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+
+        dialogProfile= ProfileDialog(this)
+
+
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,6 +116,17 @@ class MainActivity : AppCompatActivity() {
                 binding.dlContainer.openDrawer(GravityCompat.START)
             }
         }
+
+        appBar.setOnMenuItemClickListener {
+            when(it.itemId)
+            {
+                R.id.app_bar_more -> {
+                    println("Hello") //TODO 캘린더 옵션 이벤트
+                }
+            }
+            false
+        }
+
         naviProfileImageView.setOnClickListener(profileClickListener) //SideBar 프로필 이미지 클릭 시 리스너 등록
 
 
@@ -116,8 +135,17 @@ class MainActivity : AppCompatActivity() {
     val profileClickListener=object:View.OnClickListener
     {
         override fun onClick(v: View?) {
-            setPermission()
+            dialogProfile.callDialog()
 
+            val llTakePicture:LinearLayout=dialogProfile.dialog.findViewById<LinearLayout>(R.id.llTakePicture)
+            val llGalleryPicture:LinearLayout=dialogProfile.dialog.findViewById(R.id.llGallery)
+            llTakePicture.setOnClickListener {
+               setPermission(CODE_TAKE_PICTURE)
+            }
+
+            llGalleryPicture.setOnClickListener {
+                setPermission(CODE_GALLERY_PICTURE)
+            }
         }
     }
 
@@ -196,12 +224,22 @@ class MainActivity : AppCompatActivity() {
     /**
      * 카메라 권한 설정
      */
-    private  fun setPermission()
+    private  fun setPermission(accessCode:Int)
     {
         val permission=object :PermissionListener{
             override fun onPermissionGranted() { //권한을 설정 허가할 경우 수행되는 곳
+                if(accessCode==CODE_GALLERY_PICTURE)
+                {
+                    loadPhoto()
+                }
+                else
+                {
+                    takeCapture()
+                }
+                dialogProfile.dialog.dismiss()
+
                 Toast.makeText(applicationContext, "권한이 성공적으로 설정됬습니다..", Toast.LENGTH_SHORT).show()
-                loadPhoto()
+
             }
 
             override fun onPermissionDenied(deniedPermissions: MutableList<String>?) { //권한은 거부할 경우 수행 되는 곳
