@@ -31,4 +31,5 @@
     - 촬영함수(takeCapture)
     - 사진 저장함수(SavePhoto)
     - SideBar 모서리 둥근 효과(drawable/navi_border.xml)
-    - 프로필 이미지 중앙 정렬된 정사각형으로 변경
+    - 프로필 이미지 중앙 정렬된 정사각형으로 변
+    - 프로필 이미지 외부저장소 저장 화질 개선
