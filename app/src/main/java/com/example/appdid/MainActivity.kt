@@ -1,5 +1,6 @@
 package com.example.appdid
 
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -27,6 +28,8 @@ import com.mikhaellopez.circularimageview.CircularImageView
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
+import java.lang.Exception
 import java.lang.Integer.min
 import java.util.*
 
@@ -36,17 +39,40 @@ class MainActivity : AppCompatActivity() {
     private lateinit var view_pager2: ViewPager2 // 달력, todo리스트 화면전환을 위한 ViewPager2
     private lateinit var bottom_navi_view: BottomNavigationView // 화면전환 컨트롤을 위한 Navigation
     private lateinit var naviProfileImageView:CircularImageView //SideBar 프로필 이미지 뷰
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent> // 콜백 Launch
+    private lateinit var takePictureResultLauncher: ActivityResultLauncher<Intent> // 콜백 Launch
+    private lateinit var loadPictureFromGalleryLauncher: ActivityResultLauncher<Intent> // 콜백 Launch
+    private lateinit var dialogProfileImage:Dialog //프로필 사진 다이얼로그
     private lateinit var curPhotoPath:String
-    val REQUEST_IMAGE_CAPTURE:Int=1
+
 
     override fun onStart() {
         super.onStart()
-        activityResultLauncher=registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        {
+        takePictureResultLauncher=registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { // 사진 찍기
             if(it.resultCode== RESULT_OK)
             {
                 setProfileImage()
+            }
+        }
+        loadPictureFromGalleryLauncher=registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { //사진 가져오기
+            if(it.resultCode== RESULT_OK)
+            {
+                try
+                {
+                    val fileUri: Uri? =it.data?.data
+                    val instream:InputStream= contentResolver.openInputStream(fileUri!!)!!
+                    val bitmap:Bitmap=BitmapFactory.decodeStream(instream)
+                    naviProfileImageView.setImageBitmap(bitmap)
+                    instream.close()
+                    savePhoto(bitmap)
+                }
+                catch (e:Exception)
+                {
+                    println("Load Error")
+                }
+
+
             }
         }
     }
@@ -62,7 +88,9 @@ class MainActivity : AppCompatActivity() {
         naviProfileImageView=findViewById<CircularImageView>(R.id.civProfile)
 
 
+
 //        setSupportActionBar(appBar) //ActionBar 등록 (안보이는 오류로 인해 주석처리)
+
         viewPager2Init()
         setExpandableList()
         /*
@@ -173,7 +201,7 @@ class MainActivity : AppCompatActivity() {
         val permission=object :PermissionListener{
             override fun onPermissionGranted() { //권한을 설정 허가할 경우 수행되는 곳
                 Toast.makeText(applicationContext, "권한이 성공적으로 설정됬습니다..", Toast.LENGTH_SHORT).show()
-                takeCapture()
+                loadPhoto()
             }
 
             override fun onPermissionDenied(deniedPermissions: MutableList<String>?) { //권한은 거부할 경우 수행 되는 곳
@@ -187,7 +215,9 @@ class MainActivity : AppCompatActivity() {
             .setDeniedMessage("권한을 거부 하셨습니다 [앱 설정] ->[권한] 항목에서 설정 허용해주세요.") // 거부 메시지
             .setPermissions(
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA
+                android.Manifest.permission.CAMERA,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+
             ) //해당 권한 나열
             .check()
     }
@@ -217,7 +247,7 @@ class MainActivity : AppCompatActivity() {
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI) //해당 uri로 이동
 
-                    activityResultLauncher.launch(takePictureIntent)
+                    takePictureResultLauncher.launch(takePictureIntent)
                 }
             }
         }
@@ -302,11 +332,22 @@ class MainActivity : AppCompatActivity() {
         if(File(folderPath+fileName).exists()) //파일 존재 시
         {
             File(folderPath+fileName).delete() //삭제
-            Toast.makeText(applicationContext, "삭제 완료", Toast.LENGTH_SHORT).show()
+
 
         }
         val out =FileOutputStream(folderPath + fileName)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+
+    }
+
+    private fun loadPhoto()
+    {
+        Intent(MediaStore.Images.Media.CONTENT_TYPE).also {
+            it.setType("image/*");
+            it.setAction(Intent.ACTION_GET_CONTENT);
+            loadPictureFromGalleryLauncher.launch(it)
+        }
+
 
     }
 }
