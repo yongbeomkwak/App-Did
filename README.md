@@ -42,3 +42,6 @@
 ## 11/3
     -   [구글로그인 및 Firebase 적용](https://ghs-dev.tistory.com/14)
     -   SharedPreference 세팅
+    -   [Retrofit](https://jaejong.tistory.com/33)
+    -   [레트로핏 코틀린](https://kumgo1d.tistory.com/57)
+        -  DTO , Interface(Service) , Builder 정의 
