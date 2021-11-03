@@ -21,6 +21,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.appdid.bottomNavigation.Selected
 import com.example.appdid.databinding.ActivityMainBinding
 import com.example.appdid.dialog.ProfileDialog
+import com.example.appdid.utility.MyApplication
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gun0912.tedpermission.PermissionListener
@@ -92,13 +93,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val appbarView:View=findViewById(R.id.incAppBar) as View //include 태그 View를 가져오기 위함
         val appBar:MaterialToolbar=appbarView.findViewById(R.id.appBar) as MaterialToolbar //include View에서 실제 appBar가져옴
-        val navigationHeaderView:View=findViewById(R.id.nav_header)
+        val navigationHeaderView:View=findViewById(R.id.nav_header) //사이드 메뉴 appBar
+        val TvUserEmail:TextView =navigationHeaderView.findViewById(R.id.tvUserEmail)
+        val TvUserName:TextView =navigationHeaderView.findViewById(R.id.tvUserName)
         naviProfileImageView=findViewById<CircularImageView>(R.id.civProfile)
 
 
 
 //        setSupportActionBar(appBar) //ActionBar 등록 (안보이는 오류로 인해 주석처리)
-
+        TvUserEmail.text=MyApplication.prefs.getString("email")
+        TvUserName.text=MyApplication.prefs.getString("name")
         viewPager2Init()
         setExpandableList()
         /*
@@ -161,6 +165,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.dlContainer
     }
+
+
 
     fun viewPager2Init() {   // ViewPager2 이니셜라이저
         view_pager2 = binding.viewPager
@@ -228,13 +234,14 @@ class MainActivity : AppCompatActivity() {
     {
         val permission=object :PermissionListener{
             override fun onPermissionGranted() { //권한을 설정 허가할 경우 수행되는 곳
+                //해당 코드에 맞는 작업
                 if(accessCode==CODE_GALLERY_PICTURE)
                 {
-                    loadPhoto()
+                    loadPhoto() //겔러리 접근
                 }
                 else
                 {
-                    takeCapture()
+                    takeCapture() //사진 촬영
                 }
                 dialogProfile.dialog.dismiss()
 
@@ -355,7 +362,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         val resizedBitmap:Bitmap=Bitmap.createScaledBitmap(squareBitmap,bmpWidth.toInt(),bmpWidth.toInt(),true) //Resize
-        naviProfileImageView.setImageBitmap(resizedBitmap) // 이미지 뷰에 설정
+        naviProfileImageView.setImageBitmap(squareBitmap) // 이미지 뷰에 설정
         savePhoto(squareBitmap) //저장
     }
     private fun savePhoto(bitmap: Bitmap)
