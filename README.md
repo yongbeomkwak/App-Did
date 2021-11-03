@@ -37,4 +37,8 @@
 ## 10/31
     -   LoadPicture(갤러리 접근 함수)
     -   OptionMenu 선택 이벤트 구간 만들기 구현은 나중
-    -   
+    -   팝업 다이얼로그 생성 및 해당 리스너별 동작 배정
+
+## 11/3
+    -   [구글로그인 및 Firebase 적용](https://ghs-dev.tistory.com/14)
+    -   SharedPreference 세팅

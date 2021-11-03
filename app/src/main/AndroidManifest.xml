@@ -8,10 +8,14 @@
 
     <!--갤러리 권한-->
     <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!-- 인터넷 권한-->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-feature android:name="android.hardware.camera" android:required="true"></uses-feature> <!--카메라 기능 사용 카메라를 못쓰는 기기면 앱이 죽음(required true 의미) -->
 
 
     <application
+        android:name=".utility.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -19,6 +23,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppDid">
         <activity android:name=".MainActivity">
+
+        </activity>
+
+        <activity android:name=".LoginActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
