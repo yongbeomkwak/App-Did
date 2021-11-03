@@ -44,7 +44,7 @@ class CalendarFragment : Fragment() {   // 달력 Fragment
             val retrofit: Retrofit = RetrofitCreator.defaultRetrofit(ServerUri.testUri) //빌더
             val service:RetrofitService=retrofit.create(RetrofitService::class.java)//인터페이스
             val call:Call<TestDto> =service.getPosts("1") //해당 인터페이스를 통한 RUST 적
-            call.enqueue(object :Callback<TestDto>{용 //콜백함수
+            call.enqueue(object :Callback<TestDto>{//콜백함수
                 override fun onResponse(call: Call<TestDto>, response: Response<TestDto>) {
 
                     Log.d("result",response.toString())
