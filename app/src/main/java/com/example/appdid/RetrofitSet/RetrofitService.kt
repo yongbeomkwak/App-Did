@@ -1,11 +1,14 @@
 package com.example.appdid.RetrofitSet
 
+import com.example.appdid.DTO.MyTodoDTO
+import com.example.appdid.DTO.MyTodoListDTO
 import com.example.appdid.DTO.TestDto
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
-    interface RetrofitService {
+interface RetrofitService {
         //@종류: GET,POST,PUT,DELETE,HEAD
         //
         @GET("posts/{key}")
@@ -19,6 +22,17 @@ import retrofit2.http.Path
         매개변수 '@Path("key") String key' - 매개변수 key가 @Path("post")를 보고 @GET 내부 {key}에 대입
          * */
         //매개 변수 (전체 URI에서 URL을 제외한 End Point(URI))
+
+
+        //https://mp-prj-backend.herokuapp.com/todo/my?id=123412341234"
+        /**
+
+         * Query 사용시 역시 마찬가지로 com/까지만 넣어 놓고
+         * ?id=1234 .. 부분이 @Query 에노테이션으로 처리가 됨
+        */
+        @GET("todo/my")
+        fun getMyTodoList(@Query("id") id:String) : Call<MyTodoListDTO>
+
 
     }
 

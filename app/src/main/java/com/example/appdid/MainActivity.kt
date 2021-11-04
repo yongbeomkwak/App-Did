@@ -362,8 +362,8 @@ class MainActivity : AppCompatActivity() {
             }
 
         val resizedBitmap:Bitmap=Bitmap.createScaledBitmap(squareBitmap,bmpWidth.toInt(),bmpWidth.toInt(),true) //Resize
-        naviProfileImageView.setImageBitmap(squareBitmap) // 이미지 뷰에 설정
-        savePhoto(squareBitmap) //저장
+        naviProfileImageView.setImageBitmap(resizedBitmap) // 이미지 뷰에 설정
+        savePhoto(resizedBitmap) //저장
     }
     private fun savePhoto(bitmap: Bitmap)
     {
