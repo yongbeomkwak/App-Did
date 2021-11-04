@@ -9,6 +9,8 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.appdid.DTO.MyTodoDTO
+import com.example.appdid.DTO.MyTodoListDTO
 import com.example.appdid.DTO.TestDto
 import com.example.appdid.RetrofitSet.RetrofitCreator
 import com.example.appdid.RetrofitSet.RetrofitService
@@ -41,26 +43,28 @@ class CalendarFragment : Fragment() {   // 달력 Fragment
 
     val button1ClickListener : View.OnClickListener = object : View.OnClickListener{
         override fun onClick(v: View?) {
-            val retrofit: Retrofit = RetrofitCreator.defaultRetrofit(ServerUri.testUri) //빌더
+            val retrofit: Retrofit = RetrofitCreator.defaultRetrofit(ServerUri.MyServer) //빌더
             val service:RetrofitService=retrofit.create(RetrofitService::class.java)//인터페이스
-            val call:Call<TestDto> =service.getPosts("1") //해당 인터페이스를 통한 RUST 적
-            call.enqueue(object :Callback<TestDto>{//콜백함수
-                override fun onResponse(call: Call<TestDto>, response: Response<TestDto>) {
-
-                    Log.d("result",response.toString())
-                    if(response.isSuccessful())
+            val call:Call<MyTodoListDTO> =service.getMyTodoList("123412341234") //해당 인터페이스를 통한 RUST 접근
+            call.enqueue(object:Callback<MyTodoListDTO>{
+                override fun onResponse(call: Call<MyTodoListDTO>, response: Response<MyTodoListDTO>) {
+                    if(response.isSuccessful)
                     {
-                        val result:TestDto = response.body()!!
-                        Log.d("result",result.toString())
+                        val myTodoList: MyTodoListDTO =response.body()!!
+
+                        Log.e("RES",myTodoList.payloads[0].title)
+
+
+
                     }
                     else
                     {
-                        Log.d("result","실패")
+                        Log.e("RES",response.toString())
                     }
                 }
 
-                override fun onFailure(call: Call<TestDto>, t: Throwable) {
-                    Log.d("result","onFailure" + t.message)
+                override fun onFailure(call: Call<MyTodoListDTO>, t: Throwable) {
+                    Log.e("RES",t.message.toString())
                 }
             })
         }

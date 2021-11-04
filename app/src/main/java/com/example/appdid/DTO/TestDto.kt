@@ -19,7 +19,7 @@ class TestDto {
                 "userId=" + userId +
                 ", id=" + id +
                 ", title='" + title + '\'' +
-                ", bodyValue='" + body + '\'' +
+                ", body='" + body + '\'' +
                 '}';
     }
 }

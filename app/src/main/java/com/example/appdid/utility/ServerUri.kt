@@ -4,5 +4,6 @@ class ServerUri {
     //사용할 서버 URI 모음
     companion object{
         val testUri:String="https://jsonplaceholder.typicode.com/"
+        val MyServer="https://mp-prj-backend.herokuapp.com/"
     }
 }
