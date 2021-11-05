@@ -6,20 +6,20 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class CalendarMonthPagerAdapter(fm: FragmentManager, lc: Lifecycle) : FragmentStateAdapter(fm, lc) {
-    val YEAR_RANGE = 20
+    val YEAR_RANGE = 20 // 달력 범위 (현재 년도를 기준으로 20년)
     var calendarMonthFragments = arrayOfNulls<CalendarMonthFragment>(YEAR_RANGE * 12)
 
-    override fun getItemCount(): Int {
+    override fun getItemCount(): Int { // 달 갯수 리턴
         return YEAR_RANGE * 12
     }
 
-    override fun createFragment(position: Int): Fragment {
+    override fun createFragment(position: Int): Fragment { // 달력의 position번째 달을 만들 때 호출
         var calendarMonthFragment = CalendarMonthFragment()
         calendarMonthFragments[position] = calendarMonthFragment
         return calendarMonthFragment
     }
 
-    fun getItem(position: Int) : CalendarMonthFragment? {
+    fun getItem(position: Int) : CalendarMonthFragment? { // 달력 달 객체 리턴
         return calendarMonthFragments[position]
     }
 }
