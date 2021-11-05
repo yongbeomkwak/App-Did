@@ -15,17 +15,17 @@ class CalendarDayAdapter : ListAdapter<CalendarInfo, CalendarDayAdapter.ViewHold
     CalendarAdapterDiffCallback()
 ) {
 
-    class ViewHolder private constructor(
+    class ViewHolder private constructor( // RecyclerView 사용을 위한 Holder.
         val binding: LayoutCalendarDayBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: CalendarInfo) {
+        fun bind(item: CalendarInfo) { // 달력 일과 CalendarInfo 바인딩
             binding.calendarInfo = item
             binding.executePendingBindings()
         }
 
         companion object {
-            fun from(parent: ViewGroup): ViewHolder {
+            fun from(parent: ViewGroup): ViewHolder { // ViewBinding
                 val layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
                 val binding = LayoutCalendarDayBinding.inflate(
                     layoutInflater, parent, false
@@ -35,18 +35,18 @@ class CalendarDayAdapter : ListAdapter<CalendarInfo, CalendarDayAdapter.ViewHold
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder { // 달력의 일이 만들어졌을 때 호출
         return ViewHolder.from(parent)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) { // ViewHolder에 position번째 CalendarInfo 바인딩
         val item = getItem(position)
         holder.bind(item)
     }
 
 }
 
-class CalendarAdapterDiffCallback: DiffUtil.ItemCallback<CalendarInfo>() {
+class CalendarAdapterDiffCallback: DiffUtil.ItemCallback<CalendarInfo>() { // RecyclerView 전환시 두 목록의 차이점을 찾아 업데이트
     override fun areItemsTheSame(oldItem: CalendarInfo, newItem: CalendarInfo): Boolean {
         return oldItem.dayOfMonth == newItem.dayOfMonth
     }
