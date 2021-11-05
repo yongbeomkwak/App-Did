@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
 }
 
 
@@ -32,8 +33,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures { // 뷰 바인딩 활성화
-        viewBinding true
+    buildFeatures {
+        viewBinding true    // 뷰 바인딩 활성화
+        dataBinding true    // 데이터 바인딩 활성
     }
 
 }
@@ -47,6 +49,9 @@ dependencies {
 
     //coordinatorLayout 관련
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+
+    //데이터 바인딩 관련
+    kapt 'com.android.databinding:compiler:3.1.4'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.6.0'
@@ -95,7 +100,8 @@ dependencies {
     // Scalars 변환기 라이브러리
     implementation 'com.squareup.retrofit2:converter-scalars:2.6.4'
 
-
-
+    // RecyclerView for Calendar
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 
 }

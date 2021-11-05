@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="androidx.core.content.ContextCompat"/>
+        <variable
+            name="calendarInfo"
+            type="com.example.appdid.fragment.calendar.day.CalendarInfo" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/day_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/day_border"
+        android:foreground="@{context.getColor(calendarInfo.groundTrans)}">
+
+        <TextView
+            android:id="@+id/textView_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:text="@{String.valueOf(calendarInfo.dayOfMonth)}"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@{context.getColor(calendarInfo.textColor)}"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"/>
+    </LinearLayout>
+
+</layout>

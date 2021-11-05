@@ -45,3 +45,13 @@
 -   [Retrofit](https://jaejong.tistory.com/33)
 -   [레트로핏 코틀린](https://kumgo1d.tistory.com/57)
     -  DTO , Interface(Service) , Builder 정의 
+    
+## 11/5
+    -   res/color에 달력에 사용할 색상 추가
+    -   달력 일 칸 구분 줄 (drawable/day_border.xml)
+    -   달력 등록 (fragment_calendar.xml)
+    -   달력 달 이동 어뎁터 추가 (CalendarMonthPagerAdapter.kt)
+    -   달력 달 프레그먼트 추가 (CalendarMonthFragment.kt)
+    -   달력 프레그먼트에 달력 추가 (CalendarFragment.kt)
+    -   달력 일 어뎁터 추가 (CalendarDayAdapter.kt)
+    -   달력 데이터 바인딩 클래스 추가 (CalendarInfo.kt)

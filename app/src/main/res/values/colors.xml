@@ -11,5 +11,12 @@
     <color name="primary_color">#0C8EF1</color>
     <color name="secondary_color">#00BE5B</color>
 
+    <!-- 달력 -->
+    <color name="calendar_gray">#8F8F8F</color>
+    <color name="calendar_red">#FF4F4F</color>
+    <color name="calendar_blue">#4F4FFF</color>
+    <color name="calendar_clear">#00000000</color>
+    <color name="calendar_opaque">#0A000000</color>
+
 
 </resources>
