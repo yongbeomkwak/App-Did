@@ -9,6 +9,7 @@ class MyApplication : Application() {
         lateinit var prefs: Preference
         var userEmail:String?=null
         var userName:String?=null
+        var userId:String?=null
 
     }
     override fun onCreate() {
@@ -16,5 +17,6 @@ class MyApplication : Application() {
         prefs= Preference(applicationContext)
         userEmail=prefs.getString("email","noEmail")
         userName= prefs.getString("name","Noname")
+        userId=prefs.getString("id","noId")
     }
 }

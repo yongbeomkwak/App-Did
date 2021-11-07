@@ -33,12 +33,13 @@ class LoginActivity : AppCompatActivity() {
                 val result= Auth.GoogleSignInApi.getSignInResultFromIntent(it.data)
                 result.let {
                     if (it!!.isSuccess) {
-                        it.signInAccount?.displayName //이름
-                        it.signInAccount?.email //이메일
-                        Log.e("Value", it.signInAccount?.email!!)
+                        Log.e("Value", it.signInAccount?.id.toString())
+                       // Log.e("Value", it.signInAccount?.idToken.toString())
                         firebaseLogin(result!!.signInAccount!!)
                         MyApplication.prefs.setString("name",it.signInAccount!!.displayName!!) //이름
                         MyApplication.prefs.setString("email",it.signInAccount!!.email!!) //email
+                        MyApplication.prefs.setString("id",it.signInAccount!!.id.toString())
+                        MyApplication.prefs.setString("token",it.signInAccount!!.idToken.toString())
                         val intent:Intent=Intent(applicationContext,MainActivity::class.java)
                         Toast.makeText(this,"Google Login Success",Toast.LENGTH_SHORT).show()
                         startActivity(intent)

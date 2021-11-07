@@ -71,7 +71,7 @@ class CalendarFragment : Fragment() {   // 달력 Fragment
                 {
                     val myTodoList: MyTodoListDTO =response.body()!!
 
-                    Log.e("RES",myTodoList.payloads[0].title)
+//                    Log.e("RES",myTodoList.payloads[0].title)
                 }
                 else
                 {
