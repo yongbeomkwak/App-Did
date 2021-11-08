@@ -55,3 +55,8 @@
     -   달력 프레그먼트에 달력 추가 (CalendarFragment.kt)
     -   달력 일 어뎁터 추가 (CalendarDayAdapter.kt)
     -   달력 데이터 바인딩 클래스 추가 (CalendarInfo.kt)
+
+## 11/8
+    -   BottomSheetDialog  설정
+    -   잔체적인 리바인딩 작업 
+    
