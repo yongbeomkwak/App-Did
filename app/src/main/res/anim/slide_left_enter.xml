@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <!--
+       왼쪽에서 -100%(from)  원점(0%)(to)로 나온다
+       interpolator 보간 : accelerate_decelerate_interpolator 시작시점에 가속했다가 종료시점에 감속합니다.
+    -->
+    <translate
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:fromXDelta="-100%"
+        android:fromYDelta="0%"
+        android:toXDelta="0%"
+        android:toYDelta="0%"
+        android:duration="300"
+        >
+
+    </translate>
+</set>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!--
+ 원점(0%,from)에서 오른쪽(100%,to)로 사라짐
+-->
+    <translate
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:duration="300"
+        android:fromXDelta="0%"
+        android:fromYDelta="0%"
+        android:toXDelta="100%"
+        android:toYDelta="0%" />
+</set>
