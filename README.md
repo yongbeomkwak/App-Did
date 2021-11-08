@@ -57,6 +57,9 @@
     -   달력 데이터 바인딩 클래스 추가 (CalendarInfo.kt)
 
 ## 11/8
-    -   BottomSheetDialog  설정
-    -   잔체적인 리바인딩 작업 
-    
+-   BottomSheetDialog  설정
+-   잔체적인 리바인딩 작업 
+-   [animation(속성)](https://seosh817.tistory.com/18)
+-   [애니메이션 순서](https://greedy0110.tistory.com/52)
+-   interpolator:보간
+-   overridePendingTransition(R.anim.none, R.anim.horizon_exit) :param1:새로 나타는 화면에,param2:현재 화면에

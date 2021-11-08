@@ -43,6 +43,9 @@ class LoginActivity : AppCompatActivity() {
                         val intent:Intent=Intent(applicationContext,MainActivity::class.java)
                         Toast.makeText(this,"Google Login Success",Toast.LENGTH_SHORT).show()
                         startActivity(intent)
+                        overridePendingTransition(R.anim.slide_left_enter,R.anim.slide_right_exit)
+                        //TODO Preference 값 존재하면 바로이동
+
 
                         // 기타 등등
                     } else  {
@@ -53,6 +56,8 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

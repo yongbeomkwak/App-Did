@@ -58,7 +58,7 @@ class ExpandableListAdapter(private val context: Context,private  val fragmentMa
 
 
         parentBinding.ivTeamMore.setOnTouchListener { v, event ->
-            //이미지 버튼 눌림 효과 및 밑에서 다이얼로그 나오
+            //이미지 버튼 눌림 효과 및 밑에서 다이얼로그 나옴
             val image:ImageButton=v as ImageButton
             if (event?.getAction() == MotionEvent.ACTION_DOWN) {
 

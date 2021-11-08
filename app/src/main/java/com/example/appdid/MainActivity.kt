@@ -94,9 +94,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+
         naviHeaderBinding=binding.navHeader // include 바인딩
         appBarBinding= binding.incAppBar // include 바인딩
-
         //val appbarView:View=findViewById(R.id.incAppBar) as View //include 태그 View를 가져오기 위함
         //val appBar:MaterialToolbar=appbarView.findViewById(R.id.appBar) as MaterialToolbar //include View에서 실제 appBar가져옴
         //val navigationHeaderView:View=findViewById(R.id.nav_header) //사이드 메뉴 appBar
