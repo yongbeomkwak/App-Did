@@ -20,41 +20,28 @@
             android:id="@+id/incAppBar"
             layout="@layout/app_bar_main"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNaviView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            app:menu="@menu/bottom_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
 
-        </include>
+        <androidx.viewpager2.widget.ViewPager2
+            app:layout_constraintHeight="true"
+            app:layout_constraintTop_toBottomOf="@id/incAppBar"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNaviView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"/>
 
-
-
-
-    <androidx.viewpager2.widget.ViewPager2
-        app:layout_constraintTop_toBottomOf="@id/incAppBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bottomNaviView"
-        android:layout_below="@+id/coordinator"
-        android:layout_centerHorizontal="true">
-
-    </androidx.viewpager2.widget.ViewPager2>
-
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNaviView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/bottom_menu"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-
-        >
-
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

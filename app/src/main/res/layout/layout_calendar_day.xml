@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:temp="http://schemas.android.com/tools">
 
     <data>
         <import type="androidx.core.content.ContextCompat"/>
@@ -13,7 +13,8 @@
     <LinearLayout
         android:id="@+id/day_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        temp:layout_height="@{calendarInfo.height}"
         android:orientation="vertical"
         android:background="@drawable/day_border"
         android:foreground="@{context.getColor(calendarInfo.groundTrans)}">
@@ -29,7 +30,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"/>
+            android:layout_height="match_parent"/>
     </LinearLayout>
 
 </layout>

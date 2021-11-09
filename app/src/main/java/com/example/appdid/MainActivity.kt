@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+
         takePictureResultLauncher=registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { // 사진 찍기
             if(it.resultCode== RESULT_OK)

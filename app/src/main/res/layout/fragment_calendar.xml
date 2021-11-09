@@ -9,9 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textSize="30dp"
-        android:textStyle="bold"
-        android:text="1"/>
+        android:textSize="25dp"
+        android:textStyle="bold"/>
 
     <GridLayout
         android:layout_width="match_parent"
