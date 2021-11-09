@@ -47,11 +47,17 @@
     -  DTO , Interface(Service) , Builder 정의 
     
 ## 11/5
-    -   res/color에 달력에 사용할 색상 추가
-    -   달력 일 칸 구분 줄 (drawable/day_border.xml)
-    -   달력 등록 (fragment_calendar.xml)
-    -   달력 달 이동 어뎁터 추가 (CalendarMonthPagerAdapter.kt)
-    -   달력 달 프레그먼트 추가 (CalendarMonthFragment.kt)
-    -   달력 프레그먼트에 달력 추가 (CalendarFragment.kt)
-    -   달력 일 어뎁터 추가 (CalendarDayAdapter.kt)
-    -   달력 데이터 바인딩 클래스 추가 (CalendarInfo.kt)
+-   [달력 제작 참고 블로그](https://shwoghk14.blogspot.com/2020/10/android-custom-calendar-with.html)
+-   res/color에 달력에 사용할 색상 추가
+-   달력 일 칸 구분 줄 (drawable/day_border.xml)
+-   달력 등록 (fragment_calendar.xml)
+-   달력 달 이동 어뎁터 추가 (CalendarMonthPagerAdapter.kt)
+-   달력 달 프레그먼트 추가 (CalendarMonthFragment.kt)
+-   달력 프레그먼트에 달력 추가 (CalendarFragment.kt)
+-   달력 일 어뎁터 추가 (CalendarDayAdapter.kt)
+-   달력 데이터 바인딩 클래스 추가 (CalendarInfo.kt)
+
+## 11/9
+-   달력 위쪽 글자 클릭시 원하는 달로 한번에 이동할 수 있는 DatePicker 구현 (CalendarFragment.kt)
+-   달력 날짜 높이 조절을 위한 데이터바인딩 함수 (CalendarDayAdapter.kt) [dewinjm/monthyear-picker](https://github.com/dewinjm/monthyear-picker)
+-   달력 크기를 화면 크기에 맞춤 (CalendarMonthFragment.kt)

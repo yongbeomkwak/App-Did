@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,12 +16,16 @@ class CalendarDayAdapter : ListAdapter<CalendarInfo, CalendarDayAdapter.ViewHold
     CalendarAdapterDiffCallback()
 ) {
 
+    lateinit var viewHolder: ViewHolder
+
     class ViewHolder private constructor( // RecyclerView 사용을 위한 Holder.
         val binding: LayoutCalendarDayBinding
     ): RecyclerView.ViewHolder(binding.root) {
+        lateinit var dayBackground: LinearLayout
 
         fun bind(item: CalendarInfo) { // 달력 일과 CalendarInfo 바인딩
             binding.calendarInfo = item
+            dayBackground = binding.dayBackground
             binding.executePendingBindings()
         }
 
@@ -42,6 +47,18 @@ class CalendarDayAdapter : ListAdapter<CalendarInfo, CalendarDayAdapter.ViewHold
     override fun onBindViewHolder(holder: ViewHolder, position: Int) { // ViewHolder에 position번째 CalendarInfo 바인딩
         val item = getItem(position)
         holder.bind(item)
+        viewHolder = holder
+    }
+
+    companion object {
+        @JvmStatic
+        @BindingAdapter("temp:layout_height")
+        fun setLayoutHeight(view: View, height: Int) { // 달력 내 날짜의 높이를 calendarInfo의 height로 조절
+            val layoutParams = view.layoutParams
+            layoutParams.height = height
+            view.layoutParams = layoutParams
+            view.invalidate()
+        }
     }
 
 }

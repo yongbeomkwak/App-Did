@@ -21,11 +21,13 @@ import com.example.appdid.bottomNavigation.Selected
 import com.example.appdid.databinding.FragmentCalendarBinding
 import com.example.appdid.fragment.calendar.month.CalendarMonthPagerAdapter
 import com.example.appdid.utility.ServerUri
+import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import java.util.*
+import com.github.dewinjm.monthyearpicker.MonthYearPickerDialog
 
 class CalendarFragment : Fragment() {   // 달력 Fragment
     private var _binding: FragmentCalendarBinding? = null
@@ -34,8 +36,12 @@ class CalendarFragment : Fragment() {   // 달력 Fragment
     private lateinit var adapter: CalendarMonthPagerAdapter
     private lateinit var pageChangeCallback: PageChangeCallback //달력 달이 바뀔 때 호출
 
+    lateinit var root: View // 메인 뷰
     lateinit var monthText: TextView // 해당 달력이 무슨 날짜의 달력인지 표시하는 TextView
     lateinit var calendarMonthViewpager2: ViewPager2 // 달력 달 ViewPager2
+
+    var year = 0
+    var month = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,9 +49,12 @@ class CalendarFragment : Fragment() {   // 달력 Fragment
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        root = binding.root
 
         monthText = binding.monthText
+        monthText.setOnClickListener(View.OnClickListener {
+            showDatePickerDialog()
+        })
 
         adapter = CalendarMonthPagerAdapter(parentFragmentManager, lifecycle)
         pageChangeCallback = PageChangeCallback()
@@ -57,8 +66,9 @@ class CalendarFragment : Fragment() {   // 달력 Fragment
     override fun onStart() {
         super.onStart()
 
-        getServer()
-        startCalendarMonthSetting()
+//        getServer()
+        var calendar = Calendar.getInstance()
+        calendarYearMonthSetting(calendar)
     }
 
     private fun getServer() {
@@ -85,17 +95,12 @@ class CalendarFragment : Fragment() {   // 달력 Fragment
         })
     }
 
-    private fun startCalendarMonthSetting() { // 진입시 달력을 현재 달로 불러옴
-        var month: Int = Calendar.getInstance().get(Calendar.MONTH)
-        calendarMonthViewpager2.setCurrentItem(adapter.itemCount / 2 + month, true)
-        while(true) {
-            try{
-                Handler().postDelayed({
-                    pageChangeCallback.onPageSelected((adapter.itemCount / 2) + month)
-                }, 1000)
-                break
-            } catch (e: Exception) { }
-        }
+    fun calendarYearMonthSetting(calendar: Calendar) { // 해당 날짜 달력을 보여줌
+        var nowCalendar = Calendar.getInstance()
+        var month: Int = calendar.get(Calendar.MONTH)
+        var year: Int = calendar.get(Calendar.YEAR)
+        calendarMonthViewpager2.setCurrentItem(((year + 10) - nowCalendar.get(Calendar.YEAR)) * 12 + month, true)
+        pageChangeCallback.onPageSelected(((year + 10) - nowCalendar.get(Calendar.YEAR)) * 12 + month)
     }
 
     private fun calendarMonthInit() { // 달력 Init
@@ -108,20 +113,35 @@ class CalendarFragment : Fragment() {   // 달력 Fragment
     inner class PageChangeCallback: ViewPager2.OnPageChangeCallback() { // 달력 달이 바뀔 경우 달 전환
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
-            var year = Calendar.getInstance().get(Calendar.YEAR) + (position / 12) - 10
-            var month = position % 12
+            year = Calendar.getInstance().get(Calendar.YEAR) + (position / 12) - 10
+            month = position % 12
             setMonthText(year, month+1)
-
-            adapter.getItem(position)?.initCalendar(year, month)
         }
     }
 
-    fun setMonthText(month: String) { // 상단 날짜 TextView 글자 지정
-        monthText.setText(month)
+    fun setMonthText(year: Int, month: Int) { // 상단 날짜 TextView 글자 지정
+        monthText.setText(year.toString() + "년 " + month.toString() + "월 ▾")
     }
 
-    fun setMonthText(year: Int, month: Int) { // 상단 날짜 TextView 글자 지정
-        monthText.setText(year.toString() + "년 " + month.toString() + "월")
+    fun showDatePickerDialog() { // 화면에 날짜 Picker 띄우기
+        var nowCalendar = Calendar.getInstance()
+        val nowYear = nowCalendar.get(Calendar.YEAR)
+        val nowMonth = nowCalendar.get(Calendar.MONTH)
+        var calendar = Calendar.getInstance()
+        calendar.set(nowYear - 10, 0, 1)
+        val minDate = calendar.timeInMillis
+        calendar.clear()
+        calendar.set(nowYear + 9, 11, 1)
+        val maxDate = calendar.timeInMillis
+
+        var dialogFragment: MonthYearPickerDialogFragment =
+            MonthYearPickerDialogFragment.getInstance(nowMonth, nowYear, minDate, maxDate)
+        dialogFragment.show(parentFragmentManager, null)
+        dialogFragment.setOnDateSetListener { tyear, monthOfYear ->
+            calendar.clear()
+            calendar.set(tyear, monthOfYear, 1)
+            calendarYearMonthSetting(calendar)
+        }
     }
 
 }

@@ -1,9 +1,11 @@
 package com.example.appdid.fragment.calendar.month
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import com.example.appdid.R
 import com.example.appdid.databinding.FragmentCalendarMonthBinding
@@ -11,14 +13,15 @@ import com.example.appdid.fragment.calendar.day.CalendarDayAdapter
 import com.example.appdid.fragment.calendar.day.CalendarInfo
 import java.util.*
 
-class CalendarMonthFragment() : Fragment() { //Calendar Fragment에서 사용하는 달력 달 Fragment
+class CalendarMonthFragment(var year: Int, var month: Int) : Fragment() { //Calendar Fragment에서 사용하는 달력 달 Fragment
     private lateinit var _binding: FragmentCalendarMonthBinding
     private val binding get() = _binding!!
 
-    lateinit var calendarDayAdapter: CalendarDayAdapter
     lateinit var nowCalendar: Calendar // 실제 날짜
     lateinit var calendar: Calendar // 사용자가 보는 달력의 날짜
-    var isInit: Boolean = false
+
+    lateinit var dayList: MutableList<CalendarInfo> //각 날짜 배열
+    var recyclerHeight = 0 // 달력 높이
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,15 +31,22 @@ class CalendarMonthFragment() : Fragment() { //Calendar Fragment에서 사용하
         _binding = FragmentCalendarMonthBinding.inflate(inflater, container, false)
         var root: View = binding.root
 
-        calendarDayAdapter = CalendarDayAdapter()
-        binding.calendrMonthRecycler.adapter = calendarDayAdapter
+        var calendarDayAdapter = CalendarDayAdapter()
+        binding.calendarMonthRecycler.setHasFixedSize(true)
+        binding.calendarMonthRecycler.adapter = calendarDayAdapter
+
+        binding.calendarMonthRecycler.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener { // 달력의 크기를 가져오기 위한 리스너
+            override fun onGlobalLayout() {
+                binding.calendarMonthRecycler.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                recyclerHeight = binding.calendarMonthRecycler.height
+                initCalendar(calendarDayAdapter)
+            }
+        })
 
         return root
     }
 
-    fun initCalendar(year: Int, month: Int) { // 달력 init
-        if (isInit) return
-        isInit = true
+    fun initCalendar(calendarDayAdapter: CalendarDayAdapter) { // 달력 init
         nowCalendar = Calendar.getInstance()
         calendar=  Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
@@ -47,18 +57,18 @@ class CalendarMonthFragment() : Fragment() { //Calendar Fragment에서 사용하
         val week = calendar.get(Calendar.DAY_OF_WEEK) - 1
         val month = calendar.get(Calendar.MONTH) + 1
         val year = calendar.get(Calendar.YEAR)
-        val list = MutableList(week, init={ CalendarInfo() })
+        dayList = MutableList(week, init={ CalendarInfo() })
 
         val bfCalendar = getMonth(year, month-2)
         val bfMaxDate = bfCalendar.getActualMaximum(Calendar.DATE)
         val bfMonth = bfCalendar.get(Calendar.MONTH) + 1
         val bfYear = bfCalendar.get(Calendar.YEAR)
-        for(i in 0 until list.size) {
-            list[i] = CalendarInfo(bfYear, bfMonth, bfMaxDate - list.size + i + 1, i % 7)
+        for(i in 0 until dayList.size) {
+            dayList[i] = CalendarInfo(bfYear, bfMonth, bfMaxDate - dayList.size + i + 1, i % 7)
         }
 
         for (i in 1..maxDate) {
-            list.add(
+            dayList.add(
                 CalendarInfo(year, month, i, (week + i - 1) % 7)
             )
         }
@@ -67,15 +77,16 @@ class CalendarMonthFragment() : Fragment() { //Calendar Fragment에서 사용하
         val afMonth = afCalendar.get(Calendar.MONTH) + 1
         val afYear = afCalendar.get(Calendar.YEAR)
         var i = 1
-        while(list.size % 7 != 0) {
-            list.add(
-                CalendarInfo(afYear, afMonth, i++, list.size % 7)
+        while(dayList.size % 7 != 0) {
+            dayList.add(
+                CalendarInfo(afYear, afMonth, i++, dayList.size % 7)
             )
         }
 
-        setListColor(list, month)
+        setListColor(dayList, month)
 
-        calendarDayAdapter.submitList(list)
+        calendarDayAdapter.submitList(dayList)
+        setListHeight()
     }
 
     fun getMonth(year: Int, month: Int) : Calendar { // 해당 년도와 달의 달력을 리턴
@@ -116,6 +127,12 @@ class CalendarMonthFragment() : Fragment() { //Calendar Fragment에서 사용하
             if (calendarInfo.month != month) {
                 calendarInfo.groundTrans = R.color.calendar_opaque
             }
+        }
+    }
+
+    fun setListHeight() { // 각 날짜의 크기를 달력에 맞춤
+        for(i in 0 until dayList.size) {
+            dayList[i].height = (recyclerHeight / (dayList.size / 7))
         }
     }
 }
