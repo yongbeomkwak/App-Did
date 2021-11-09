@@ -34,6 +34,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".TeamSettingActivity">
+
+        </activity>
 
         <!--사진 촬여 후 저장 할 작업을 위한 프로바이더 ,res/xml 폴더에 경로 설정-->
         <provider

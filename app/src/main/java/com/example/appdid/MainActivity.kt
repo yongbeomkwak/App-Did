@@ -20,6 +20,8 @@ import androidx.core.view.GravityCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.appdid.bottomNavigation.Selected
 import com.example.appdid.databinding.ActivityMainBinding
+import com.example.appdid.databinding.AppBarMainBinding
+import com.example.appdid.databinding.NavigationHeaderBinding
 import com.example.appdid.dialog.ProfileDialog
 import com.example.appdid.utility.MyApplication
 import com.google.android.material.appbar.MaterialToolbar
@@ -39,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding // 일일이 R.id.*를 하지 않기 위한 바인딩
     private lateinit var view_pager2: ViewPager2 // 달력, todo리스트 화면전환을 위한 ViewPager2
+    private lateinit var naviHeaderBinding:NavigationHeaderBinding
+    private lateinit var appBarBinding:AppBarMainBinding
     private lateinit var bottom_navi_view: BottomNavigationView // 화면전환 컨트롤을 위한 Navigation
     private lateinit var naviProfileImageView:CircularImageView //SideBar 프로필 이미지 뷰
     private lateinit var takePictureResultLauncher: ActivityResultLauncher<Intent> // 콜백 Launch
@@ -91,27 +95,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        val appbarView:View=findViewById(R.id.incAppBar) as View //include 태그 View를 가져오기 위함
-        val appBar:MaterialToolbar=appbarView.findViewById(R.id.appBar) as MaterialToolbar //include View에서 실제 appBar가져옴
-        val navigationHeaderView:View=findViewById(R.id.nav_header) //사이드 메뉴 appBar
-        val TvUserEmail:TextView =navigationHeaderView.findViewById(R.id.tvUserEmail)
-        val TvUserName:TextView =navigationHeaderView.findViewById(R.id.tvUserName)
-        naviProfileImageView=findViewById<CircularImageView>(R.id.civProfile)
+
+        naviHeaderBinding=binding.navHeader // include 바인딩
+        appBarBinding= binding.incAppBar // include 바인딩
+        //val appbarView:View=findViewById(R.id.incAppBar) as View //include 태그 View를 가져오기 위함
+        //val appBar:MaterialToolbar=appbarView.findViewById(R.id.appBar) as MaterialToolbar //include View에서 실제 appBar가져옴
+        //val navigationHeaderView:View=findViewById(R.id.nav_header) //사이드 메뉴 appBar
+        //val TvUserEmail:TextView =navigationHeaderView.findViewById(R.id.tvUserEmail)
+        //val TvUserName:TextView =navigationHeaderView.findViewById(R.id.tvUserName)
+        naviProfileImageView=naviHeaderBinding.civProfile
+
 
 
 
 //        setSupportActionBar(appBar) //ActionBar 등록 (안보이는 오류로 인해 주석처리)
-        TvUserEmail.text=MyApplication.prefs.getString("email")
-        TvUserName.text=MyApplication.prefs.getString("name")
+        naviHeaderBinding.tvUserEmail.text=MyApplication.prefs.getString("email")
+        naviHeaderBinding.tvUserName.text=MyApplication.prefs.getString("name")
         viewPager2Init()
         setExpandableList()
+
         /*
         initialize
         */
 
         //register Listener
-        appBar.setNavigationOnClickListener { //햄버거 메뉴 클릭 이벤트
+        appBarBinding.appBar.setNavigationOnClickListener { //햄버거 메뉴 클릭 이벤트
             if(binding.dlContainer.isDrawerOpen(GravityCompat.START))
             {
                 binding.dlContainer.closeDrawer(GravityCompat.START)
@@ -122,7 +130,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        appBar.setOnMenuItemClickListener {
+        appBarBinding.appBar.setOnMenuItemClickListener {
             when(it.itemId)
             {
                 R.id.app_bar_more -> {
@@ -134,7 +142,7 @@ class MainActivity : AppCompatActivity() {
 
         naviProfileImageView.setOnClickListener(profileClickListener) //SideBar 프로필 이미지 클릭 시 리스너 등록
 
-
+        setContentView(binding.root)
 
     }
     val profileClickListener=object:View.OnClickListener
@@ -210,10 +218,13 @@ class MainActivity : AppCompatActivity() {
         )
         val expandableListAdapter=com.example.appdid.expandableList.ExpandableListAdapter(
             this,
+                supportFragmentManager,
             parentsList,
             childList
         )
+
         binding.elMenu.setAdapter(expandableListAdapter)
+
         binding.elMenu.setOnGroupClickListener { parent, v, groupPosition, id ->
             //TODO
             println("Click group")
@@ -221,9 +232,11 @@ class MainActivity : AppCompatActivity() {
         }
         binding.elMenu.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
             //TODO
+
             println("Click child")
             false
         }
+        println("SetEx")
 
     }
 
