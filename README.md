@@ -69,3 +69,14 @@
 -   달력 위쪽 글자 클릭시 원하는 달로 한번에 이동할 수 있는 DatePicker 구현 (CalendarFragment.kt)
 -   달력 날짜 높이 조절을 위한 데이터바인딩 함수 (CalendarDayAdapter.kt) [dewinjm/monthyear-picker](https://github.com/dewinjm/monthyear-picker)
 -   달력 크기를 화면 크기에 맞춤 (CalendarMonthFragment.kt)
+
+
+## 11/12
+-   TeamSettingActivity 규격 잡기
+-   레이아웃 초본 완성
+-   RecyclerView 각 아이템 별로 데코레이션(높이) 설정
+-   TeamMemberDTO 생성 및 서버로 부터 받아올 준비
+-   초대코드 복사 작업완료
+
+
+

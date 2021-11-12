@@ -1,6 +1,5 @@
 package com.example.appdid
 
-import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -24,7 +23,6 @@ import com.example.appdid.databinding.AppBarMainBinding
 import com.example.appdid.databinding.NavigationHeaderBinding
 import com.example.appdid.dialog.ProfileDialog
 import com.example.appdid.utility.MyApplication
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
@@ -35,7 +33,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.lang.Exception
 import java.lang.Integer.min
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -216,7 +213,7 @@ class MainActivity : AppCompatActivity() {
                 "자식 3"
             )
         )
-        val expandableListAdapter=com.example.appdid.expandableList.ExpandableListAdapter(
+        val expandableListAdapter=com.example.appdid.adapter.ExpandableListAdapter(
             this,
                 supportFragmentManager,
             parentsList,
