@@ -63,3 +63,12 @@
 -   [애니메이션 순서](https://greedy0110.tistory.com/52)
 -   interpolator:보간
 -   overridePendingTransition(R.anim.none, R.anim.horizon_exit) :param1:새로 나타는 화면에,param2:현재 화면에
+
+
+
+## 11/12
+-   TeamSettingActivity 규격 잡기
+-   레이아웃 초본 완성
+-   RecyclerView 각 아이템 별로 데코레이션(높이) 설정
+-   TeamMemberDTO 생성 및 서버로 부터 받아올 준비
+-   초대코드 복사 작업완료

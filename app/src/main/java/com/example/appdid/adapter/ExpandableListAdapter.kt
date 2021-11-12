@@ -1,11 +1,6 @@
-package com.example.appdid.expandableList
+package com.example.appdid.adapter
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.media.Image
-import android.text.Layout
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -13,14 +8,11 @@ import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import com.example.appdid.R
-import com.example.appdid.databinding.AppBarMainBinding
 import com.example.appdid.databinding.MenuChildBinding
 import com.example.appdid.databinding.MenuParentBinding
 import com.example.appdid.dialog.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class ExpandableListAdapter(private val context: Context,private  val fragmentManager: FragmentManager, private val parents: MutableList<String>, private val childList: MutableList<MutableList<String>>) : BaseExpandableListAdapter() {
     private lateinit var parentBinding:MenuParentBinding

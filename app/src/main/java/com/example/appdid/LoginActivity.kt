@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
                 val result= Auth.GoogleSignInApi.getSignInResultFromIntent(it.data)
                 result.let {
                     if (it!!.isSuccess) {
-                        Log.e("Value", it.signInAccount?.id.toString())
+                        Log.e("Value", it.signInAccount?.idToken.toString())
                        // Log.e("Value", it.signInAccount?.idToken.toString())
                         firebaseLogin(result!!.signInAccount!!)
                         MyApplication.prefs.setString("name",it.signInAccount!!.displayName!!) //이름
