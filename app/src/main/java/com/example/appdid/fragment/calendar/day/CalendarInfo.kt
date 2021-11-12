@@ -9,5 +9,6 @@ class CalendarInfo(
     var dayOfMonth: Int = 0, // 해당 달의 날짜
     var dayOfWeek: Int = 0, // 요일 (일요일:0 ~ 토요일:6)
     var textColor: Int = R.color.calendar_gray, // 일 글자 색
-    var groundTrans: Int = R.color.calendar_clear // 일 색
+    var groundTrans: Int = R.color.calendar_clear, // 일 색
+    var height: Int = 60 // 날짜의 높이
 )
