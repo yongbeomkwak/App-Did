@@ -138,6 +138,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         naviProfileImageView.setOnClickListener(profileClickListener) //SideBar 프로필 이미지 클릭 시 리스너 등록
+        binding.llTeamAdd.setOnClickListener(teamAddListener)
 
         setContentView(binding.root)
 
@@ -156,6 +157,17 @@ class MainActivity : AppCompatActivity() {
             llGalleryPicture.setOnClickListener {
                 setPermission(CODE_GALLERY_PICTURE)
             }
+        }
+    }
+
+    val teamAddListener=object :View.OnClickListener
+    {
+        override fun onClick(v: View?) {
+            val intent:Intent=Intent(applicationContext,TeamCreateActivity::class.java)
+
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_left_enter,R.anim.slide_right_exit)
+
         }
     }
 
@@ -405,6 +417,12 @@ class MainActivity : AppCompatActivity() {
             loadPictureFromGalleryLauncher.launch(it)
         }
 
+
+    }
+    override fun finish() {
+
+        super.finish()
+        overridePendingTransition(R.anim.slide_right_enter,R.anim.slide_left_exit) //finish()호출 시 에니메이션 설정,툴바 뒤로가기를 위해
 
     }
 }
