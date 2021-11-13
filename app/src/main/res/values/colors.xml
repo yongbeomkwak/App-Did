@@ -19,4 +19,7 @@
     <color name="calendar_opaque">#0A000000</color>
 
 
+    <color name="editText_background">#C4C4C4</color>
+
+
 </resources>
