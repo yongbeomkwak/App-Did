@@ -4,14 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include
-        android:id="@+id/incAppBar"
-        layout="@layout/app_bar_team_setting"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_percent="0.1"
-        ></include>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,7 +15,7 @@
         >
 
         <LinearLayout
-
+            android:id="@+id/ll_inviteCode"
             android:paddingHorizontal="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,44 +45,14 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/llpassword"
-            android:layout_marginTop="80dp"
-            android:paddingHorizontal="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
 
-            <TextView
-                android:textColor="@color/black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="비밀번호"
-                android:textSize="20sp"
-                ></TextView>
-
-            <EditText
-                android:inputType="textPassword"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:id="@+id/etPassword"
-                android:background="@color/editText_background"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </EditText>
-
-
-
-        </LinearLayout>
 
         <Button
 
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:layout_alignRight="@id/llpassword"
-            android:layout_below="@+id/llpassword"
+            android:layout_alignRight="@id/ll_inviteCode"
+            android:layout_below="@+id/ll_inviteCode"
             android:id="@+id/btnInvite"
             android:text="참가"
             android:layout_width="wrap_content"

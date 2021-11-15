@@ -22,6 +22,7 @@ import com.example.appdid.databinding.ActivityMainBinding
 import com.example.appdid.databinding.AppBarMainBinding
 import com.example.appdid.databinding.NavigationHeaderBinding
 import com.example.appdid.dialog.ProfileDialog
+import com.example.appdid.dialog.TeamCreateDialog
 import com.example.appdid.utility.MyApplication
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gun0912.tedpermission.PermissionListener
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var curPhotoPath:String
     private val CODE_TAKE_PICTURE:Int=0
     private val CODE_GALLERY_PICTURE:Int=1
+    private lateinit var dialogAddTeam:TeamCreateDialog
 
 
     override fun onStart() {
@@ -111,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         viewPager2Init()
         setExpandableList()
 
+
         /*
         initialize
         */
@@ -138,6 +141,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         naviProfileImageView.setOnClickListener(profileClickListener) //SideBar 프로필 이미지 클릭 시 리스너 등록
+        dialogAddTeam= TeamCreateDialog(this)
         binding.llTeamAdd.setOnClickListener(teamAddListener)
 
         setContentView(binding.root)
@@ -163,10 +167,12 @@ class MainActivity : AppCompatActivity() {
     val teamAddListener=object :View.OnClickListener
     {
         override fun onClick(v: View?) {
-            val intent:Intent=Intent(applicationContext,TeamCreateActivity::class.java)
-
-            startActivity(intent)
-            overridePendingTransition(R.anim.slide_left_enter,R.anim.slide_right_exit)
+            if(binding.dlContainer.isDrawerOpen(GravityCompat.START))
+            {
+                binding.dlContainer.closeDrawer(GravityCompat.START)
+            }
+            println("Dialog")
+            dialogAddTeam.setDialog()
 
         }
     }
@@ -218,13 +224,8 @@ class MainActivity : AppCompatActivity() {
     private fun  setExpandableList() //리스트 이니셜라이저
     {
         val parentsList= mutableListOf<String>("부모1", "부모2", "부모3")
-        val childList = mutableListOf(
-            mutableListOf(), mutableListOf("자식 1", "자식 2"), mutableListOf(
-                "자식 1",
-                "자식 2",
-                "자식 3"
-            )
-        )
+        val childList = mutableListOf(mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf(""))
+        //TODO parentList보다 하나 더 만든다
         val expandableListAdapter=com.example.appdid.adapter.ExpandableListAdapter(
             this,
                 supportFragmentManager,
@@ -235,7 +236,7 @@ class MainActivity : AppCompatActivity() {
         binding.elMenu.setAdapter(expandableListAdapter)
 
         binding.elMenu.setOnGroupClickListener { parent, v, groupPosition, id ->
-            //TODO
+            //TODO 달력 초기화
             println("Click group")
             false
         }
@@ -245,7 +246,7 @@ class MainActivity : AppCompatActivity() {
             println("Click child")
             false
         }
-        println("SetEx")
+
 
     }
 

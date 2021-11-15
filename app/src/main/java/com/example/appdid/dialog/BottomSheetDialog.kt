@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.appdid.R
 import com.example.appdid.TeamSettingActivity
 import com.example.appdid.databinding.DialogBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
