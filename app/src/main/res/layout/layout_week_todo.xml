@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="androidx.core.content.ContextCompat"/>
+        <variable
+            name="calendarWeekTodoInfo"
+            type="com.example.appdid.fragment.calendar.todo.week.CalendarWeekTodoInfo" />
+    </data>
+
+    <TableLayout
+        android:id="@+id/week_todo_table"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/day_border"
+        tools:height="@{calendarWeekTodoInfo.height}"
+        android:stretchColumns="*">
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_span="7"/>
+        </TableRow>
+
+    </TableLayout>
+
+</layout>

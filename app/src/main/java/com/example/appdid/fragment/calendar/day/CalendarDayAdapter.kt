@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appdid.databinding.LayoutCalendarDayBinding
+import java.util.*
 
 class CalendarDayAdapter : ListAdapter<CalendarInfo, CalendarDayAdapter.ViewHolder>( //달력 일 어뎁터
     CalendarAdapterDiffCallback()
@@ -21,11 +22,9 @@ class CalendarDayAdapter : ListAdapter<CalendarInfo, CalendarDayAdapter.ViewHold
     class ViewHolder private constructor( // RecyclerView 사용을 위한 Holder.
         val binding: LayoutCalendarDayBinding
     ): RecyclerView.ViewHolder(binding.root) {
-        lateinit var dayBackground: LinearLayout
 
         fun bind(item: CalendarInfo) { // 달력 일과 CalendarInfo 바인딩
             binding.calendarInfo = item
-            dayBackground = binding.dayBackground
             binding.executePendingBindings()
         }
 
@@ -52,12 +51,18 @@ class CalendarDayAdapter : ListAdapter<CalendarInfo, CalendarDayAdapter.ViewHold
 
     companion object {
         @JvmStatic
-        @BindingAdapter("temp:layout_height")
+        @BindingAdapter("tools:layout_height")
         fun setLayoutHeight(view: View, height: Int) { // 달력 내 날짜의 높이를 calendarInfo의 height로 조절
             val layoutParams = view.layoutParams
             layoutParams.height = height
             view.layoutParams = layoutParams
             view.invalidate()
+        }
+
+        @JvmStatic
+        @BindingAdapter("tools:text")
+        fun setTextviewText(view: TextView, calendar: Calendar) {   // 달력 날짜 설정
+            view.setText(calendar.get(Calendar.DAY_OF_MONTH).toString())
         }
     }
 
@@ -65,7 +70,7 @@ class CalendarDayAdapter : ListAdapter<CalendarInfo, CalendarDayAdapter.ViewHold
 
 class CalendarAdapterDiffCallback: DiffUtil.ItemCallback<CalendarInfo>() { // RecyclerView 전환시 두 목록의 차이점을 찾아 업데이트
     override fun areItemsTheSame(oldItem: CalendarInfo, newItem: CalendarInfo): Boolean {
-        return oldItem.dayOfMonth == newItem.dayOfMonth
+        return oldItem.dayCalendar.get(Calendar.DAY_OF_MONTH) == newItem.dayCalendar.get(Calendar.DAY_OF_MONTH)
     }
 
     @SuppressLint("DiffUtilEquals")
