@@ -7,15 +7,25 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.example.appdid.DTO.MyTodoListDTO
+import com.example.appdid.DTO.PayloadDTO
+import com.example.appdid.DTO.UserInfoDTO
+import com.example.appdid.RetrofitSet.RetrofitCreator
+import com.example.appdid.RetrofitSet.RetrofitService
 import com.example.appdid.databinding.ActivityLoginBinding
 import com.example.appdid.databinding.ActivityMainBinding
 import com.example.appdid.utility.MyApplication
+import com.example.appdid.utility.ServerUri
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 
 class LoginActivity : AppCompatActivity() {
 
@@ -36,15 +46,39 @@ class LoginActivity : AppCompatActivity() {
                         Log.e("Value", it.signInAccount?.idToken.toString())
                        // Log.e("Value", it.signInAccount?.idToken.toString())
                         firebaseLogin(result!!.signInAccount!!)
-                        MyApplication.prefs.setString("name",it.signInAccount!!.displayName!!) //이름
-                        MyApplication.prefs.setString("email",it.signInAccount!!.email!!) //email
-                        MyApplication.prefs.setString("id",it.signInAccount!!.id.toString())
                         MyApplication.prefs.setString("token",it.signInAccount!!.idToken.toString())
                         val intent:Intent=Intent(applicationContext,MainActivity::class.java)
                         Toast.makeText(this,"Google Login Success",Toast.LENGTH_SHORT).show()
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_left_enter,R.anim.slide_right_exit)
                         //TODO Preference 값 존재하면 바로이동
+                        val retrofit:Retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
+                        val service: RetrofitService =retrofit.create(RetrofitService::class.java)//인터페이스
+                        val call:Call<PayloadDTO> =service.getProfile(mapOf(
+                                "name" to it.signInAccount!!.displayName!!,
+                                "id" to it.signInAccount!!.id.toString(),
+                                "email" to it.signInAccount!!.email.toString()
+                        ),it.signInAccount!!.idToken.toString())
+
+
+                        call.enqueue(object :Callback<PayloadDTO>{
+                            override fun onResponse(call: Call<PayloadDTO>, response: Response<PayloadDTO>) {
+                                if(response.isSuccessful)
+                                {
+                                    val payload: PayloadDTO =response.body()!!
+                                    val userInfo: UserInfoDTO = payload.payloads[0]
+                                      Log.d("Response",userInfo.toString())
+                                    MyApplication.prefs.setString("name",userInfo.name) //이름
+                                    MyApplication.prefs.setString("email",userInfo.email) //email
+                                    MyApplication.prefs.setString("id",userInfo._id)
+
+                                }
+                            }
+
+                            override fun onFailure(call: Call<PayloadDTO>, t: Throwable) {
+                                Log.e("Response","Error")
+                            }
+                        })
 
 
                         // 기타 등등

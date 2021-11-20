@@ -1,12 +1,8 @@
 package com.example.appdid.RetrofitSet
 
-import com.example.appdid.DTO.MyTodoDTO
-import com.example.appdid.DTO.MyTodoListDTO
-import com.example.appdid.DTO.TestDto
+import com.example.appdid.DTO.*
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface RetrofitService {
         //@종류: GET,POST,PUT,DELETE,HEAD
@@ -32,6 +28,10 @@ interface RetrofitService {
         */
         @GET("todo/my")
         fun getMyTodoList(@Query("id") id:String) : Call<MyTodoListDTO>
+
+
+        @GET("profile")
+        fun getProfile(@QueryMap querys:Map<String,String>,@Header("Authorization") token:String) : Call<PayloadDTO>
 
 
     }
