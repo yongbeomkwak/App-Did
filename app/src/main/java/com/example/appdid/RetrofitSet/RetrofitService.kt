@@ -33,6 +33,9 @@ interface RetrofitService {
         @GET("profile")
         fun getProfile(@QueryMap querys:Map<String,String>,@Header("Authorization") token:String) : Call<PayloadDTO>
 
+        @POST("group") //group name, userid
+        fun postGroup(@QueryMap querys: Map<String, String>, @Header("Authorization") token:String) : Call<CodeMessageDTO>
+
 
     }
 
