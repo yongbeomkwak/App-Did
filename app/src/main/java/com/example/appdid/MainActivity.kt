@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
@@ -16,18 +17,30 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager2.widget.ViewPager2
+import com.example.appdid.DTO.CodeMessageDTO
+import com.example.appdid.DTO.PayloadDTO
+import com.example.appdid.DTO.UserInfoDTO
+import com.example.appdid.RetrofitSet.RetrofitCreator
+import com.example.appdid.RetrofitSet.RetrofitService
 import com.example.appdid.bottomNavigation.Selected
 import com.example.appdid.databinding.ActivityMainBinding
 import com.example.appdid.databinding.AppBarMainBinding
 import com.example.appdid.databinding.NavigationHeaderBinding
 import com.example.appdid.dialog.ProfileDialog
 import com.example.appdid.dialog.TeamCreateDialog
+import com.example.appdid.dialog.TeamParticiapteDialog
 import com.example.appdid.utility.MyApplication
+import com.example.appdid.utility.ServerUri
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.mikhaellopez.circularimageview.CircularImageView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -49,7 +62,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var curPhotoPath:String
     private val CODE_TAKE_PICTURE:Int=0
     private val CODE_GALLERY_PICTURE:Int=1
+    private lateinit var dialogParticipateTeam:TeamParticiapteDialog
     private lateinit var dialogAddTeam:TeamCreateDialog
+    private lateinit var teamList:List<String>
+
 
 
     override fun onStart() {
@@ -111,7 +127,7 @@ class MainActivity : AppCompatActivity() {
         naviHeaderBinding.tvUserEmail.text=MyApplication.prefs.getString("email")
         naviHeaderBinding.tvUserName.text=MyApplication.prefs.getString("name")
         viewPager2Init()
-        setExpandableList()
+
 
 
         /*
@@ -126,6 +142,7 @@ class MainActivity : AppCompatActivity() {
             }
             else
             {
+                reFreshTeamList()
                 binding.dlContainer.openDrawer(GravityCompat.START)
             }
         }
@@ -142,7 +159,10 @@ class MainActivity : AppCompatActivity() {
 
         naviProfileImageView.setOnClickListener(profileClickListener) //SideBar 프로필 이미지 클릭 시 리스너 등록
         dialogAddTeam= TeamCreateDialog(this)
+        dialogParticipateTeam= TeamParticiapteDialog(this)
+        binding.llTeamParticipaate.setOnClickListener(teamParticipateListener)
         binding.llTeamAdd.setOnClickListener(teamAddListener)
+
 
         setContentView(binding.root)
 
@@ -164,15 +184,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    val teamAddListener=object :View.OnClickListener
+    val teamParticipateListener=object :View.OnClickListener
     {
         override fun onClick(v: View?) {
             if(binding.dlContainer.isDrawerOpen(GravityCompat.START))
             {
                 binding.dlContainer.closeDrawer(GravityCompat.START)
             }
-            println("Dialog")
+
+            dialogParticipateTeam.setDialog()
+
+        }
+    }
+
+    val teamAddListener=object :View.OnClickListener {
+        override fun onClick(v: View?) {
+            if (binding.dlContainer.isDrawerOpen(GravityCompat.START)) {
+                binding.dlContainer.closeDrawer(GravityCompat.START)
+            }
             dialogAddTeam.setDialog()
+
 
         }
     }
@@ -187,7 +218,7 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         }
 
-        binding.dlContainer
+
     }
 
 
@@ -219,35 +250,6 @@ class MainActivity : AppCompatActivity() {
                 true
             }
         }
-    }
-
-    private fun  setExpandableList() //리스트 이니셜라이저
-    {
-        val parentsList= mutableListOf<String>("부모1", "부모2", "부모3")
-        val childList = mutableListOf(mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf(""))
-        //TODO parentList보다 하나 더 만든다
-        val expandableListAdapter=com.example.appdid.adapter.ExpandableListAdapter(
-            this,
-                supportFragmentManager,
-            parentsList,
-            childList
-        )
-
-        binding.elMenu.setAdapter(expandableListAdapter)
-
-        binding.elMenu.setOnGroupClickListener { parent, v, groupPosition, id ->
-            //TODO 달력 초기화
-            println("Click group")
-            false
-        }
-        binding.elMenu.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
-            //TODO
-
-            println("Click child")
-            false
-        }
-
-
     }
 
 
@@ -424,6 +426,54 @@ class MainActivity : AppCompatActivity() {
 
         super.finish()
         overridePendingTransition(R.anim.slide_right_enter,R.anim.slide_left_exit) //finish()호출 시 에니메이션 설정,툴바 뒤로가기를 위해
+    }
+
+    fun reFreshTeamList()
+    {
+        val retrofit:Retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
+        val service:RetrofitService=retrofit.create(RetrofitService::class.java)
+        val call: Call<PayloadDTO> =service.getProfile(mapOf(
+                "id" to MyApplication.prefs.getString("id",""),
+        ),MyApplication.prefs.getString("token"))
+
+        call.enqueue(object : Callback<PayloadDTO> {
+            override fun onResponse(call: Call<PayloadDTO>, response: Response<PayloadDTO>) {
+                Log.e("RESS",response.toString())
+                if(response.isSuccessful)
+                {
+                    val payload: PayloadDTO =response.body()!!
+                    val userInfo: UserInfoDTO = payload.payloads[0]
+                    Log.d("Response",userInfo.toString())
+                    MyApplication.TeamInfo=payload.payloads[0].userGroupDTOS
+
+                }
+            }
+
+            override fun onFailure(call: Call<PayloadDTO>, t: Throwable) {
+                Log.e("Response","Error")
+            }
+        })
+
+        val parentsList= MyApplication.TeamInfo
+        val childList = mutableListOf(mutableListOf(),mutableListOf(""))
+        val expandableListAdapter=com.example.appdid.adapter.ExpandableListAdapter(
+                this,
+                supportFragmentManager,
+                parentsList,
+                childList
+        )
+        binding.elMenu.setAdapter(expandableListAdapter)
+
+        binding.elMenu.setOnGroupClickListener { parent, v, groupPosition, id ->
+            //TODO 달력 초기화
+            println("Click group")
+            false
+        }
+        binding.elMenu.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
+            //TODO
+            println("Click child")
+            false
+        }
 
     }
 }

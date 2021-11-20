@@ -1,6 +1,7 @@
 package com.example.appdid.utility
 
 import android.app.Application
+import com.example.appdid.DTO.UserGroupDTO
 
 class MyApplication : Application() {
 
@@ -10,6 +11,8 @@ class MyApplication : Application() {
         var userEmail:String?=null
         var userName:String?=null
         var userId:String?=null
+
+        var TeamInfo:List<UserGroupDTO> = mutableListOf()
 
     }
     override fun onCreate() {

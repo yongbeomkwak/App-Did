@@ -3,12 +3,24 @@ package com.example.appdid.dialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.example.appdid.DTO.CodeMessageDTO
+import com.example.appdid.DTO.UserInfoDTO
+import com.example.appdid.MainActivity
 import com.example.appdid.R
+import com.example.appdid.RetrofitSet.RetrofitCreator
+import com.example.appdid.RetrofitSet.RetrofitService
 import com.example.appdid.databinding.AppBarTeamSettingBinding
 import com.example.appdid.databinding.DialogAddTeamBinding
+import com.example.appdid.utility.MyApplication
+import com.example.appdid.utility.ServerUri
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 
 class TeamCreateDialog(private val context: Context) {
     private val dialog=Dialog(context)
@@ -26,8 +38,31 @@ class TeamCreateDialog(private val context: Context) {
         dialog.show()
 
         binding.btnInvite.setOnClickListener {
-            println("In")
+            val retrofit: Retrofit = RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
+            val service: RetrofitService =retrofit.create(RetrofitService::class.java)
+            val call: Call<CodeMessageDTO> =service.postGroup(mapOf(
+                    "userId" to MyApplication.prefs.getString("id",""),
+                    "groupName" to binding.etTeamName.text!!.toString()
+            ), MyApplication.prefs.getString("token"))
+
+            call.enqueue(object : Callback<CodeMessageDTO> {
+                override fun onResponse(call: Call<CodeMessageDTO>, response: Response<CodeMessageDTO>) {
+                    Log.e("RESS",response.toString())
+                    if(response.isSuccessful)
+                    {
+                        val payload: CodeMessageDTO =response.body()!!
+                        println(payload.toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<CodeMessageDTO>, t: Throwable) {
+                    Log.e("Response","Error")
+                }
+            })
             dialog.dismiss()
+
+
+
         }
     }
 

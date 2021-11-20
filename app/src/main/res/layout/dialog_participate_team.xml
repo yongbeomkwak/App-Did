@@ -14,9 +14,8 @@
 
         >
 
-
         <LinearLayout
-            android:id="@+id/ll_teamName"
+            android:id="@+id/ll_inviteCode"
             android:paddingHorizontal="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,7 +25,7 @@
                 android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="팀 이름"
+                android:text="초대코드"
                 android:textSize="20sp"
                 >
 
@@ -35,7 +34,7 @@
             <EditText
                 android:singleLine="true"
                 android:textColor="@color/white"
-                android:id="@+id/et_teamName"
+                android:id="@+id/etInviteCode"
                 android:background="@color/editText_background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -52,8 +51,8 @@
 
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:layout_alignRight="@id/ll_teamName"
-            android:layout_below="@+id/ll_teamName"
+            android:layout_alignRight="@id/ll_inviteCode"
+            android:layout_below="@+id/ll_inviteCode"
             android:id="@+id/btnInvite"
             android:text="참가"
             android:layout_width="wrap_content"
