@@ -2,10 +2,12 @@ package com.example.appdid.dialog
 
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.appdid.DTO.CodeMessageDTO
 import com.example.appdid.DTO.UserInfoDTO
@@ -26,6 +28,7 @@ class TeamCreateDialog(private val context: Context) {
     private val dialog=Dialog(context)
     private lateinit var mBinding:DialogAddTeamBinding
     private val binding get() = mBinding!!
+
 
 
     fun setDialog()
@@ -51,6 +54,7 @@ class TeamCreateDialog(private val context: Context) {
                     if(response.isSuccessful)
                     {
                         val payload: CodeMessageDTO =response.body()!!
+                        Toast.makeText(context,payload.message,Toast.LENGTH_LONG).show()
                         println(payload.toString())
                     }
                 }
@@ -58,6 +62,12 @@ class TeamCreateDialog(private val context: Context) {
                 override fun onFailure(call: Call<CodeMessageDTO>, t: Throwable) {
                     Log.e("Response","Error")
                 }
+            })
+            dialog.setOnDismissListener(object:DialogInterface.OnDismissListener {
+                override fun onDismiss(dialog: DialogInterface?) {
+                    (context as MainActivity).reFreshTeamList()
+                }
+
             })
             dialog.dismiss()
 

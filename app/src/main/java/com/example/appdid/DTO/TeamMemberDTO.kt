@@ -1,19 +1,22 @@
 package com.example.appdid.DTO
 
-class TeamMemberDTO(private val userName:String,private val userId:String) {
+import com.google.gson.annotations.SerializedName
 
-    
+data class TeamMemberDTO(
+        @SerializedName("name")
+        private val userName:String,
+        @SerializedName("_id")
+        private val userId:String
+        ){
 
-
-    fun getUserName():String
-    {
-        return this.userName
-    }
-
-    fun userId():String
-    {
-     return this.userId
-    }
-
-
+        fun getName():String
+        {
+                return userName
+        }
+        fun getId():String
+        {
+                return userId
+        }
 }
+
+

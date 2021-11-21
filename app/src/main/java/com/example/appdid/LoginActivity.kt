@@ -75,6 +75,7 @@ class LoginActivity : AppCompatActivity() {
                                     MyApplication.prefs.setString("id",userInfo._id)
                                     MyApplication.TeamInfo=payload.payloads[0].userGroupDTOS
 
+
                                 }
                             }
 

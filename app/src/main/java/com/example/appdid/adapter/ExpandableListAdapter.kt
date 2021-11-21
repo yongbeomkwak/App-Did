@@ -88,7 +88,7 @@ class ExpandableListAdapter(private val context: Context,private  val fragmentMa
     }
     private  fun setBottomSheetDialog(parentPosition: Int)
     {
-        val bottomSheetDialog: BottomSheetDialog= BottomSheetDialog(parents[parentPosition].groupName)
+        val bottomSheetDialog: BottomSheetDialog= BottomSheetDialog(parents[parentPosition])
         bottomSheetDialog.show(fragmentManager,"Tag")
     }
     private fun setArrow(parentPosition: Int) {
