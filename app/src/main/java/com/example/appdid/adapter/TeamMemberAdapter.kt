@@ -10,7 +10,7 @@ import com.example.appdid.DTO.TeamMemberDTO
 import com.example.appdid.databinding.SubLayoutTeamMemberBinding
 
 // 뷰바인딩을 이용한 Adapter설정
-class TeamMemberAdapter(private val context:Context,private val members:ArrayList<TeamMemberDTO>) : RecyclerView.Adapter<TeamMemberAdapter.TeamMemberHolder>() {
+class TeamMemberAdapter(private val context:Context,private val members:List<TeamMemberDTO>) : RecyclerView.Adapter<TeamMemberAdapter.TeamMemberHolder>() {
     private var mBinding:SubLayoutTeamMemberBinding? =null
     private val binding get() = mBinding!!
 
@@ -28,7 +28,7 @@ class TeamMemberAdapter(private val context:Context,private val members:ArrayLis
         {
             with(members[position])
             {
-                binding.tvTeamMemberName.text=getUserName()
+                binding.tvTeamMemberName.text=getName()
 
 
             }

@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     private val CODE_GALLERY_PICTURE:Int=1
     private lateinit var dialogParticipateTeam:TeamParticiapteDialog
     private lateinit var dialogAddTeam:TeamCreateDialog
-    private lateinit var teamList:List<String>
+
 
 
 
@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity() {
         dialogParticipateTeam= TeamParticiapteDialog(this)
         binding.llTeamParticipaate.setOnClickListener(teamParticipateListener)
         binding.llTeamAdd.setOnClickListener(teamAddListener)
-
+        reFreshTeamList()
 
         setContentView(binding.root)
 
@@ -455,7 +455,9 @@ class MainActivity : AppCompatActivity() {
         })
 
         val parentsList= MyApplication.TeamInfo
-        val childList = mutableListOf(mutableListOf(),mutableListOf(""))
+        //TODO parentsList보다 2 크게 마지막 빈칸
+        val childList:MutableList<MutableList<String>> = MutableList(parentsList.size+2,{index -> mutableListOf()})
+
         val expandableListAdapter=com.example.appdid.adapter.ExpandableListAdapter(
                 this,
                 supportFragmentManager,
@@ -475,5 +477,12 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
+    }
+    fun closeDrawer()
+    {
+        if(binding.dlContainer.isDrawerOpen(GravityCompat.START))
+        {
+            binding.dlContainer.closeDrawer(GravityCompat.START)
+        }
     }
 }

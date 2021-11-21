@@ -37,6 +37,16 @@ interface RetrofitService {
         fun postGroup(@QueryMap querys: Map<String, String>, @Header("Authorization") token:String) : Call<CodeMessageDTO>
 
 
-    }
+        @PUT("group/remove/{groupId}")
+        fun removeGroup(@Path("groupId") groupId:String, @Query("userId") query: String, @Header("Authorization") token:String) : Call<CodeMessageDTO>
+
+
+        @GET("group/{groupId}")
+        fun getGroup(@Path("groupId") groupId: String,@Header("Authorization") token:String) : Call<GroupPayloadDTO>
+
+
+        @PUT("group/join/{groupId}")
+        fun joinGroup(@Path("groupId") groupId: String,@Query("userId") query:String,@Header("Authorization") token:String):Call<CodeMessageDTO>
+}
 
 
