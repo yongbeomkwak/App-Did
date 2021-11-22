@@ -5,16 +5,27 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.appdid.DTO.GroupPayloadDTO
+import com.example.appdid.DTO.PayloadDTO
 import com.example.appdid.DTO.TeamMemberDTO
+import com.example.appdid.RetrofitSet.RetrofitCreator
+import com.example.appdid.RetrofitSet.RetrofitService
 import com.example.appdid.adapter.TeamMemberAdapter
 import com.example.appdid.adapter.TeamMemberHeightDecoration
 import com.example.appdid.databinding.ActivityTeamSettingBinding
 import com.example.appdid.databinding.AppBarTeamSettingBinding
+import com.example.appdid.utility.MyApplication
+import com.example.appdid.utility.ServerUri
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 
 class TeamSettingActivity : AppCompatActivity() {
     private var mBinding:ActivityTeamSettingBinding?=null
@@ -27,15 +38,42 @@ class TeamSettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         overridePendingTransition(R.anim.slide_left_enter,R.anim.slide_right_exit) //새로운 엑티비티 왼쪽에서 들오고,현재엑티비티는 왼쪽으로 사라진다
         mintent=getIntent()
+        inviteCode= mintent!!.getStringExtra("groupId").toString()
         mBinding= ActivityTeamSettingBinding.inflate(layoutInflater)
         mAppBarBinding=binding.incAppBar
         setSupportActionBar(mAppBarBinding.appBar) //ActionBar 설정
         supportActionBar!!.setDisplayHomeAsUpEnabled(true) // 뒤로가기 설정
-        supportActionBar!!.setTitle(mintent!!.getStringExtra("TeamName")) //actionBar title 설정
-        inviteCode="123456789" //TODO 초대 코드 초기화 -> 서버로 부터 받아올 것
-        val arrayList:ArrayList<TeamMemberDTO> = arrayListOf<TeamMemberDTO>(TeamMemberDTO("T1","1234"),TeamMemberDTO("T2","12345"))
+
+
+        val retrofit:Retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
+        val service:RetrofitService=retrofit.create(RetrofitService::class.java)
+        val call:Call<GroupPayloadDTO> =service.getGroup(inviteCode, MyApplication.prefs.getString("token"))
+
+
+        call.enqueue(object:Callback<GroupPayloadDTO>{
+            override fun onResponse(call: Call<GroupPayloadDTO>, response: Response<GroupPayloadDTO>) {
+                Log.e("RESSS",response.toString())
+                Log.e("DTODTO",response.body().toString())
+               if(response.isSuccessful)
+               {
+                   val payload:GroupPayloadDTO= response.body()!!
+                   val arrayList=payload.payloads.users
+                   initTeamMembers(arrayList)
+                   supportActionBar!!.setTitle(response.body()!!.payloads.groupName) //actionBar title 설정
+
+               }
+            }
+
+            override fun onFailure(call: Call<GroupPayloadDTO>, t: Throwable) {
+                Log.e("RESSS",call.toString())
+            }
+        })
+
+
+
+
         //TODO 팀 멤버 정보 받아오기 , 이미지, 유저이름,아이디 등등
-        initTeamMembers(arrayList)
+
 
 
 
@@ -48,7 +86,8 @@ class TeamSettingActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    fun initTeamMembers(arrayList:ArrayList<TeamMemberDTO>) // RecyclerView 초기화
+
+    fun initTeamMembers(arrayList:List<TeamMemberDTO>) // RecyclerView 초기화
     {
         binding.recTeamMembers.adapter=TeamMemberAdapter(this,arrayList) //어뎁터 설정
         binding.recTeamMembers.addItemDecoration(TeamMemberHeightDecoration(30)) //아이템 높이 간격 설정,데코레이션 추가

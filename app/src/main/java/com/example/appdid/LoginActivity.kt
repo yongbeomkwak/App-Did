@@ -8,6 +8,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.appdid.DTO.MyTodoListDTO
+import com.example.appdid.DTO.CodeMessageDTO
 import com.example.appdid.DTO.PayloadDTO
 import com.example.appdid.DTO.UserInfoDTO
 import com.example.appdid.RetrofitSet.RetrofitCreator
@@ -63,14 +64,17 @@ class LoginActivity : AppCompatActivity() {
 
                         call.enqueue(object :Callback<PayloadDTO>{
                             override fun onResponse(call: Call<PayloadDTO>, response: Response<PayloadDTO>) {
+                                Log.e("RESS",response.toString())
                                 if(response.isSuccessful)
                                 {
-                                    val payload: PayloadDTO =response.body()!!
+                                    val payload: PayloadDTO=response.body()!!
                                     val userInfo: UserInfoDTO = payload.payloads[0]
                                       Log.d("Response",userInfo.toString())
                                     MyApplication.prefs.setString("name",userInfo.name) //이름
                                     MyApplication.prefs.setString("email",userInfo.email) //email
                                     MyApplication.prefs.setString("id",userInfo._id)
+                                    MyApplication.TeamInfo=payload.payloads[0].userGroupDTOS
+
 
                                 }
                             }

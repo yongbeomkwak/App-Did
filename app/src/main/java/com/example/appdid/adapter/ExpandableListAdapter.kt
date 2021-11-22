@@ -9,12 +9,14 @@ import android.widget.BaseExpandableListAdapter
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.fragment.app.FragmentManager
+import com.example.appdid.DTO.UserGroupDTO
+import com.example.appdid.DTO.UserInfoDTO
 import com.example.appdid.R
 import com.example.appdid.databinding.MenuChildBinding
 import com.example.appdid.databinding.MenuParentBinding
 import com.example.appdid.dialog.BottomSheetDialog
 
-class ExpandableListAdapter(private val context: Context,private  val fragmentManager: FragmentManager, private val parents: MutableList<String>, private val childList: MutableList<MutableList<String>>) : BaseExpandableListAdapter() {
+class ExpandableListAdapter(private val context: Context,private  val fragmentManager: FragmentManager, private val parents: List<UserGroupDTO>, private val childList: MutableList<MutableList<String>>) : BaseExpandableListAdapter() {
     private lateinit var parentBinding:MenuParentBinding
     private lateinit var childBinding: MenuChildBinding
 
@@ -43,7 +45,8 @@ class ExpandableListAdapter(private val context: Context,private  val fragmentMa
         //val parentView = inflater.inflate(R.layout.menu_parent, parentview, false)
         //val textView: TextView = parentView.findViewById(R.id.tvTeamTitle)
         //val imgMore: ImageButton = parentView.findViewById(R.id.ivTeamMore)
-        parentBinding.tvTeamTitle.text = parents[groupPosition]
+        parentBinding.tvTeamTitle.text = parents[groupPosition].groupName
+        println("GroupName: " + parents[groupPosition].groupName)
         setIcon(groupPosition)
 
         setArrow(groupPosition)
