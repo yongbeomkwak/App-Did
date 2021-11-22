@@ -34,9 +34,12 @@ import com.example.appdid.dialog.TeamParticiapteDialog
 import com.example.appdid.utility.MyApplication
 import com.example.appdid.utility.ServerUri
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.mikhaellopez.circularimageview.CircularImageView
+import java.io.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -89,7 +92,8 @@ class MainActivity : AppCompatActivity() {
                     val bitmap:Bitmap=BitmapFactory.decodeStream(instream)
                     naviProfileImageView.setImageBitmap(bitmap)
                     instream.close()
-                    savePhoto(bitmap)
+//                    savePhoto(bitmap)
+                    saveProfileImageFirebase(bitmap)
                 }
                 catch (e:Exception)
                 {
@@ -389,12 +393,13 @@ class MainActivity : AppCompatActivity() {
 
         val resizedBitmap:Bitmap=Bitmap.createScaledBitmap(squareBitmap,bmpWidth.toInt(),bmpWidth.toInt(),true) //Resize
         naviProfileImageView.setImageBitmap(resizedBitmap) // 이미지 뷰에 설정
-        savePhoto(resizedBitmap) //저장
+//        savePhoto(resizedBitmap) //저장
+        saveProfileImageFirebase(resizedBitmap) // 저장
     }
     private fun savePhoto(bitmap: Bitmap)
     {
         val absolutePath = "/storage/emulated/0/"
-        val folderPath = "$absolutePath/pictures/"
+        val folderPath = "$absolutePath/Pictures/"
         val fileName="Profile.jpeg"
         val folder=File(folderPath)
         if(!folder.isDirectory) //현재 해당 경로에 폴더가 없다면
@@ -404,12 +409,12 @@ class MainActivity : AppCompatActivity() {
         if(File(folderPath+fileName).exists()) //파일 존재 시
         {
             File(folderPath+fileName).delete() //삭제
-
+            Log.e("Value", "Delete")
 
         }
+
         val out =FileOutputStream(folderPath + fileName)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-
     }
 
     private fun loadPhoto()
@@ -422,6 +427,36 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+    fun saveProfileImageFirebase(bitmap: Bitmap) { // 프로필 이미지 파이어베이스에 저장
+
+        val imageUri = bitmapToUri("profile", bitmap)
+
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val riversRef = storageRef.child("ProfileImages/" + imageUri.lastPathSegment)
+        val uploadTask = riversRef.putFile(imageUri)
+
+        uploadTask.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result.toString()
+                Log.e("Value", "url" + downloadUri)
+            }
+            else{
+                Log.e("Value", task.exception.toString())
+            }
+        }
+
+        contentResolver.delete(imageUri, null, null)
+    }
+
+    fun bitmapToUri(filename: String, bitmap: Bitmap) : Uri { // Bitmap을 Uri로 변환
+        var bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(applicationContext.contentResolver, bitmap, filename, null)
+        return Uri.parse(path)
+    }
+
     override fun finish() {
 
         super.finish()
