@@ -107,4 +107,6 @@ dependencies {
     // DatePicker 라이브러리
     implementation 'com.github.dewinjm:monthyear-picker:1.0.2'
 
+    // Save Profile image in firebase storage
+    implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
 }
