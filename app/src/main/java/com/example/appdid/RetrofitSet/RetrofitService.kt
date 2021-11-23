@@ -47,6 +47,9 @@ interface RetrofitService {
 
         @PUT("group/join/{groupId}")
         fun joinGroup(@Path("groupId") groupId: String,@Query("userId") query:String,@Header("Authorization") token:String):Call<CodeMessageDTO>
+
+        @PUT("profile/{id}")
+        fun setProfile(@Path("id") id: String, @Query("avatar") query:String, @Header("Authorization") token:String) : Call<CodeMessageDTO>
 }
 
 

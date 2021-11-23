@@ -10,7 +10,7 @@ class CalendarDayTodoInfo (
     var title: String = "title", // Todo 이름
     var width: Int = 0, // 넓이
     var _group: String = "", // Todo 그룹 이름
-    var color: Int = R.color.purple_200, // 배경색
+    var color: Int = R.color.todo_1, // 배경색
     var row: Int = -1, // 몇번째 행
         ) {
     fun copy() : CalendarDayTodoInfo { // deep copy method
