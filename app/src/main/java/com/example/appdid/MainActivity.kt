@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.example.appdid.DTO.CodeMessageDTO
@@ -440,7 +441,30 @@ class MainActivity : AppCompatActivity() {
         uploadTask.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val downloadUri = task.result.toString()
-                Log.e("Value", "url" + downloadUri)
+                val retrofit:Retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
+                val service: RetrofitService =retrofit.create(RetrofitService::class.java)//인터페이스
+                val call:Call<CodeMessageDTO> = service.setProfile(
+                    MyApplication.prefs.getString("id", ""),
+                    downloadUri,
+                    MyApplication.prefs.getString("token")
+                )
+
+                call.enqueue(object : Callback<CodeMessageDTO> {
+                    override fun onResponse(
+                        call: Call<CodeMessageDTO>,
+                        response: Response<CodeMessageDTO>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.e("Response", "SUCCESS")
+                            Toast.makeText(applicationContext, "프로필 사진을 변경했습니다.", Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CodeMessageDTO>, t: Throwable) {
+                        Log.e("Response", "Error")
+                    }
+                })
             }
             else{
                 Log.e("Value", task.exception.toString())
@@ -502,6 +526,7 @@ class MainActivity : AppCompatActivity() {
         binding.elMenu.setAdapter(expandableListAdapter)
 
         binding.elMenu.setOnGroupClickListener { parent, v, groupPosition, id ->
+            Log.e("WOW" ,expandableListAdapter.getGroup(groupPosition)._id + ", " + expandableListAdapter.getGroup(groupPosition).groupName)
             //TODO 달력 초기화
             println("Click group")
             false

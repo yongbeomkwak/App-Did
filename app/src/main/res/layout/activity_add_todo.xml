@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layout_add_todo">
+
+    <Button
+        android:id="@+id/button_exit_add_todo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:foreground="@drawable/back_arrow"
+        android:background="#00FFFFFF"/>
+
+    <EditText
+        android:id="@+id/edit_todo_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:background="@color/editText_background"
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/edit_todo_title"
+        android:layout_above="@+id/edit_todo_title"
+        android:text="제 목"
+        android:textSize="20dp"/>
+
+    <Button
+        android:id="@+id/button_todo_color"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@+id/edit_todo_title"
+        android:layout_alignRight="@+id/edit_todo_title"
+        android:foreground="@color/todo_1" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/edit_todo_title">
+
+        <Button
+            android:id="@+id/button_begin_todo"
+            android:layout_columnWeight="1"
+            android:layout_margin="10dp"
+            android:text="yyyy-MM-dd"
+            android:backgroundTint="@color/calendar_gray"/>
+
+        <Button
+            android:id="@+id/button_end_todo"
+            android:layout_columnWeight="1"
+            android:layout_margin="10dp"
+            android:text="yyyy-MM-dd"
+            android:backgroundTint="@color/calendar_gray"/>
+
+    </GridLayout>
+
+    <Button
+        android:id="@+id/button_add_todo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:text="추가하기"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:layout_margin="10dp"/>
+
+</RelativeLayout>
