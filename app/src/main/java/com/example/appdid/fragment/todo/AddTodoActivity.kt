@@ -1,4 +1,4 @@
-package com.example.appdid.fragment.calendar.todo
+package com.example.appdid.fragment.todo
 
 import android.os.Bundle
 import android.widget.Button
