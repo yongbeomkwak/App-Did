@@ -12,5 +12,9 @@
         <item name="android:statusBarColor" tools:targetApi="l">#9A0C8EF1</item>
         <!--<item name="android:windowTranslucentStatus">true</item>-->
         <!-- Customize your theme here. -->
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- 검은화면 제거-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 앱 실행 시 처음 잠깐 나오는 하얀 화면 없애기-->
     </style>
 </resources>
