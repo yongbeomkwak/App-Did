@@ -14,6 +14,8 @@
         android:foreground="@drawable/back_arrow"
         android:background="#00FFFFFF"/>
 
+
+
     <EditText
         android:id="@+id/edit_todo_title"
         android:layout_width="match_parent"
@@ -63,10 +65,11 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="2"
+        android:columnCount="3"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/spProject">
+
 
         <Button
             android:id="@+id/button_begin_todo"
@@ -75,6 +78,17 @@
             android:text="yyyy-MM-dd"
             android:backgroundTint="@color/calendar_gray"/>
 
+        <TextView
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="~"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:layout_columnWeight="1"
+            >
+        </TextView>
         <Button
             android:id="@+id/button_end_todo"
             android:layout_columnWeight="1"
