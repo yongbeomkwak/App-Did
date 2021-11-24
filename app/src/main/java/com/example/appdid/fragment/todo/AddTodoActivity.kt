@@ -1,5 +1,6 @@
 package com.example.appdid.fragment.todo
 
+import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.appdid.R
 import com.example.appdid.databinding.ActivityAddTodoBinding
 import petrov.kristiyan.colorpicker.ColorPicker
+import java.util.*
 
 class AddTodoActivity : AppCompatActivity() {
 
@@ -23,6 +25,8 @@ class AddTodoActivity : AppCompatActivity() {
     private lateinit var projects:MutableList<String> //프로젝트 명 리스트
     private lateinit var projectsIds:MutableList<String> //프로젝트 아이디
     private lateinit var toDoColor:String
+    private lateinit var beginDate:String
+    private lateinit var endDate:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         teamId=intent.getStringExtra("groupId").toString()
@@ -60,9 +64,83 @@ class AddTodoActivity : AppCompatActivity() {
         }
 
         buttonAdd = binding.buttonAddTodo
+        buttonAdd.setOnClickListener {
+            //보낼 데이터 , beginData,endDate,제목,색깔,프로젝트 \
+
+
+            //보낸 후
+            finish()
+        }
 
         buttonBeginTodo = binding.buttonBeginTodo
+        buttonBeginTodo.setOnClickListener {
+            val cal= Calendar.getInstance()
+            val dateSetListener=DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                if(month+1<10)
+                {
+                    if(dayOfMonth<10)
+                    {
+                        beginDate="${year}-0${month+1}-0${dayOfMonth}"
+                    }
+                    else
+                    {
+                        beginDate="${year}-0${month+1}-${dayOfMonth}"
+                    }
+
+                }
+                else
+                {
+                    if(dayOfMonth<10)
+                    {
+                        beginDate="${year}-${month+1}-0${dayOfMonth}"
+                    }
+                    else
+                    {
+                        beginDate="${year}-${month+1}-${dayOfMonth}"
+                    }
+
+                }
+
+                buttonBeginTodo.text=beginDate
+            }
+            DatePickerDialog(this,dateSetListener,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
         buttonEndTodo = binding.buttonEndTodo
+        buttonEndTodo.setOnClickListener {
+            val cal= Calendar.getInstance()
+            val dateSetListener=DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                if(month+1<10)
+                {
+
+                    if(dayOfMonth<10)
+                    {
+                        endDate="${year}-0${month+1}-0${dayOfMonth}"
+                    }
+                    else
+                    {
+                        endDate="${year}-0${month+1}-${dayOfMonth}"
+                    }
+                }
+                else
+                {
+                    if(dayOfMonth<10)
+                    {
+                        endDate="${year}-${month+1}-0${dayOfMonth}"
+                    }
+                    else
+                    {
+                        endDate="${year}-${month+1}-${dayOfMonth}"
+                    }
+
+                }
+
+
+                buttonEndTodo.text=endDate
+            }
+            DatePickerDialog(this,dateSetListener,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
         buttonExit.setOnClickListener {
             //뒤로가기
             finish()
