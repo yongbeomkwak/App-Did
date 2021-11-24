@@ -112,5 +112,6 @@
 
 ## 11/24
 -   스플래쉬 화면 적용(SplashActivity.kt)
--   에니메이션 적용(anim)
+-   [에니메이션 적용(anim)](https://hongbeomi.medium.com/animation-splash-screen-%EB%A7%8C%EB%93%A4%EA%B8%B0-54b6d21e8bdd)
 -   에니메이션 관련 질문 및 앱 킬 때 흰 화면 없얘기(value->style)
+-   Color Picker 및 프로젝트 Spinner 세팅

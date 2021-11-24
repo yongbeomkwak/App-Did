@@ -29,7 +29,7 @@ class SlashActivity:AppCompatActivity() {
                 //에니메이션 끝날때
                 val intent:Intent=Intent(applicationContext,LoginActivity::class.java)
                 startActivity(intent)
-                overridePendingTransition(R.anim.slide_up_exit,R.anim.slide_up_enter)
+                overridePendingTransition(R.anim.slide_up_enter,R.anim.slide_up_exit)
                 finish()
             }
 

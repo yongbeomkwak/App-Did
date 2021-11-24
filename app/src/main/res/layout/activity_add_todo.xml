@@ -32,13 +32,33 @@
         android:text="제 목"
         android:textSize="20dp"/>
 
+    <TextView
+
+        android:id="@+id/tvProject"
+        android:text="프 로 젝 트"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_todo_title"
+        android:layout_alignLeft="@id/spProject"
+        >
+
+    </TextView>
+
+   <Spinner
+       android:id="@+id/spProject"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/tvProject"
+       android:layout_marginLeft="10dp"
+       ></Spinner>
     <Button
         android:id="@+id/button_todo_color"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_above="@+id/edit_todo_title"
         android:layout_alignRight="@+id/edit_todo_title"
-        android:foreground="@color/todo_1" />
+        />
 
     <GridLayout
         android:layout_width="match_parent"
@@ -46,7 +66,7 @@
         android:columnCount="2"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/edit_todo_title">
+        android:layout_below="@id/spProject">
 
         <Button
             android:id="@+id/button_begin_todo"

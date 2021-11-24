@@ -10,6 +10,9 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
@@ -32,6 +35,7 @@ import com.example.appdid.databinding.NavigationHeaderBinding
 import com.example.appdid.dialog.ProfileDialog
 import com.example.appdid.dialog.TeamCreateDialog
 import com.example.appdid.dialog.TeamParticiapteDialog
+import com.example.appdid.fragment.todo.AddTodoActivity
 import com.example.appdid.utility.MyApplication
 import com.example.appdid.utility.ServerUri
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -68,7 +72,7 @@ class MainActivity : AppCompatActivity() {
     private val CODE_GALLERY_PICTURE:Int=1
     private lateinit var dialogParticipateTeam:TeamParticiapteDialog
     private lateinit var dialogAddTeam:TeamCreateDialog
-
+    private lateinit var groupId:String
 
 
 
@@ -155,8 +159,10 @@ class MainActivity : AppCompatActivity() {
         appBarBinding.appBar.setOnMenuItemClickListener {
             when(it.itemId)
             {
-                R.id.app_bar_more -> {
-                    println("Hello") //TODO 캘린더 옵션 이벤트
+                R.id.menu_AddTodo -> {
+                    val intent:Intent=Intent(applicationContext,AddTodoActivity::class.java)
+                    intent.putExtra("groupId",groupId)
+                    startActivity(intent)
                 }
             }
             false
@@ -225,6 +231,8 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+
 
 
 
@@ -504,6 +512,7 @@ class MainActivity : AppCompatActivity() {
                     val userInfo: UserInfoDTO = payload.payloads[0]
                     Log.d("Response",userInfo.toString())
                     MyApplication.TeamInfo=payload.payloads[0].userGroupDTOS
+                    groupId=payload.payloads[0].userGroupDTOS[0]._id //개인 그룹으로 초기
 
                 }
             }
@@ -528,6 +537,7 @@ class MainActivity : AppCompatActivity() {
         binding.elMenu.setOnGroupClickListener { parent, v, groupPosition, id ->
             Log.e("WOW" ,expandableListAdapter.getGroup(groupPosition)._id + ", " + expandableListAdapter.getGroup(groupPosition).groupName)
             //TODO 달력 초기화
+            groupId=expandableListAdapter.getGroup(groupPosition)._id
             println("Click group")
             false
         }

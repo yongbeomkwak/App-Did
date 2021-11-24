@@ -109,4 +109,9 @@ dependencies {
 
     // Save Profile image in firebase storage
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
+
+
+    //Color Picker
+    implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
+
 }
