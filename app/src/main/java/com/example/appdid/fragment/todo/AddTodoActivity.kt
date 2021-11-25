@@ -43,6 +43,7 @@ class AddTodoActivity : AppCompatActivity() {
     private lateinit var  service:RetrofitService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         teamId=intent.getStringExtra("groupId").toString()
         toDoColor=String.format("#%06X", (0xFFFFFF and  R.color.primary_color)) //기본 색
 
@@ -88,7 +89,8 @@ class AddTodoActivity : AppCompatActivity() {
                     "endDate" to endDate,
                     "color" to toDoColor,
                     "title" to edittextTitle.text.toString(),
-                    "projectId" to projectCode
+                    "projectId" to projectCode,
+                    "groupId" to teamId
             ),MyApplication.prefs.getString("token"))
 
             call.enqueue(object :Callback<CodeMessageDTO>{
@@ -184,8 +186,8 @@ class AddTodoActivity : AppCompatActivity() {
             //뒤로가기
             finish()
         }
-
         getProjects()
+
 
     }
 
@@ -202,6 +204,7 @@ class AddTodoActivity : AppCompatActivity() {
 
                     for (project in palyoad)
                     {
+                        Log.d("Projects",project.projectName)
                         projects.add(project.projectName)
                         projectsIds.add(project._id)
                     }
