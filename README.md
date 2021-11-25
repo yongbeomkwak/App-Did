@@ -115,3 +115,8 @@
 -   [에니메이션 적용(anim)](https://hongbeomi.medium.com/animation-splash-screen-%EB%A7%8C%EB%93%A4%EA%B8%B0-54b6d21e8bdd)
 -   에니메이션 관련 질문 및 앱 킬 때 흰 화면 없얘기(value->style)
 -   Color Picker 및 프로젝트 Spinner 세팅
+-   Date Picker 설정
+
+## 11/25 
+-   TODO리스트 작성 및 서버 연결
+-   해당 팀에 대한 Project 받아오기

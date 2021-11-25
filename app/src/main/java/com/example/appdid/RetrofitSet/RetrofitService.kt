@@ -50,6 +50,13 @@ interface RetrofitService {
 
         @PUT("profile/{id}")
         fun setProfile(@Path("id") id: String, @Query("avatar") query:String, @Header("Authorization") token:String) : Call<CodeMessageDTO>
+
+
+        @GET("project")
+        fun getProjects(@Query("groupId") id:String,@Header("Authorization") token:String) :Call<ProjectPayloadDTO>
+
+        @POST("todo")
+        fun postProject(@QueryMap querys: Map<String, String>, @Header("Authorization") token:String) :Call<CodeMessageDTO>
 }
 
 

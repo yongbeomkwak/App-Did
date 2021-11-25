@@ -3,12 +3,24 @@ package com.example.appdid.fragment.todo
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.appdid.DTO.CodeMessageDTO
+import com.example.appdid.DTO.ProjectDTO
+import com.example.appdid.DTO.ProjectPayloadDTO
 import com.example.appdid.R
+import com.example.appdid.RetrofitSet.RetrofitCreator
+import com.example.appdid.RetrofitSet.RetrofitService
 import com.example.appdid.databinding.ActivityAddTodoBinding
+import com.example.appdid.utility.MyApplication
+import com.example.appdid.utility.ServerUri
 import petrov.kristiyan.colorpicker.ColorPicker
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import java.util.*
 
 class AddTodoActivity : AppCompatActivity() {
@@ -27,11 +39,15 @@ class AddTodoActivity : AppCompatActivity() {
     private lateinit var toDoColor:String
     private lateinit var beginDate:String
     private lateinit var endDate:String
+    private lateinit var retrofit:Retrofit
+    private lateinit var  service:RetrofitService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         teamId=intent.getStringExtra("groupId").toString()
         toDoColor=String.format("#%06X", (0xFFFFFF and  R.color.primary_color)) //기본 색
 
+        retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
+        service=retrofit.create(RetrofitService::class.java)
 
         binding = ActivityAddTodoBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -66,10 +82,33 @@ class AddTodoActivity : AppCompatActivity() {
         buttonAdd = binding.buttonAddTodo
         buttonAdd.setOnClickListener {
             //보낼 데이터 , beginData,endDate,제목,색깔,프로젝트 \
+            val call:Call<CodeMessageDTO> =service.postProject(mapOf(
+                    "userId" to MyApplication.prefs.getString("id"),
+                    "beginDate" to beginDate,
+                    "endDate" to endDate,
+                    "color" to toDoColor,
+                    "title" to edittextTitle.text.toString(),
+                    "projectId" to projectCode
+            ),MyApplication.prefs.getString("token"))
+
+            call.enqueue(object :Callback<CodeMessageDTO>{
+                override fun onResponse(call: Call<CodeMessageDTO>, response: Response<CodeMessageDTO>) {
+
+                    if(response.isSuccessful)
+                    {
+                        Toast.makeText(applicationContext,response.body()!!.message,Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+
+                override fun onFailure(call: Call<CodeMessageDTO>, t: Throwable) {
+                    //
+                }
+            })
 
 
             //보낸 후
-            finish()
+
         }
 
         buttonBeginTodo = binding.buttonBeginTodo
@@ -152,9 +191,30 @@ class AddTodoActivity : AppCompatActivity() {
 
     fun getProjects()
     {
+        projects= mutableListOf("해당 프로젝트를 선택해주세요",)
+        projectsIds= mutableListOf("0",)
+        val call:Call<ProjectPayloadDTO> =service.getProjects(teamId,MyApplication.prefs.getString("token"))
+        call.enqueue(object:Callback<ProjectPayloadDTO>{
+            override fun onResponse(call: Call<ProjectPayloadDTO>, response: Response<ProjectPayloadDTO>) {
+                if(response.isSuccessful)
+                {
+                    val palyoad:List<ProjectDTO> =response.body()!!.payloads
+
+                    for (project in palyoad)
+                    {
+                        projects.add(project.projectName)
+                        projectsIds.add(project._id)
+                    }
+
+                }
+            }
+
+            override fun onFailure(call: Call<ProjectPayloadDTO>, t: Throwable) {
+                Log.e("RES","ERROR")
+            }
+        })
         //TODO groupId를 보내서 해당 그룹의 프로젝트들을 불러오는 것
-        projects= mutableListOf("해당 프로젝트를 선택해주세요", "1234", "5678")
-        projectsIds= mutableListOf("0", "12", "12")
+
 
         val adapter:ArrayAdapter<String> = ArrayAdapter(
             this,
@@ -173,7 +233,6 @@ class AddTodoActivity : AppCompatActivity() {
             ) {
                 if(position!=0)
                 {
-                    Toast.makeText(applicationContext, projects[position], Toast.LENGTH_SHORT).show()
                     projectCode=projectsIds[position]
                 }
 
