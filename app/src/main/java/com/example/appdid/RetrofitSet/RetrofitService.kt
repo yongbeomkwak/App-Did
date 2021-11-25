@@ -57,6 +57,12 @@ interface RetrofitService {
 
         @POST("todo")
         fun postProject(@QueryMap querys: Map<String, String>, @Header("Authorization") token:String) :Call<CodeMessageDTO>
+
+        @GET("todo")
+        fun getTodos(@Query("groupId") id:String,@Header("Authorization") token:String) :Call<TodoPayloadDTO>
+
+        @GET("project/todos")
+        fun getProjectsAndTodos(@Query("groupId") id:String,@Header("Authorization") token:String) :Call<ProjectsAndTodosPayloadDTO>
 }
 
 
