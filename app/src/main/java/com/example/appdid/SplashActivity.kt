@@ -7,7 +7,7 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.example.appdid.databinding.ActivitySplashBinding
 
-class SlashActivity:AppCompatActivity() {
+class SplashActivity:AppCompatActivity() {
     private var mBinding:ActivitySplashBinding?=null
     private val bind get() = mBinding!!
     override fun onCreate(savedInstanceState: Bundle?) {

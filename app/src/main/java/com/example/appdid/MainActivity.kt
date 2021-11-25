@@ -536,9 +536,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.elMenu.setOnGroupClickListener { parent, v, groupPosition, id ->
             Log.e("WOW" ,expandableListAdapter.getGroup(groupPosition)._id + ", " + expandableListAdapter.getGroup(groupPosition).groupName)
-            //TODO 달력 초기화
             groupId=expandableListAdapter.getGroup(groupPosition)._id
-            println("Click group")
+            closeDrawer()
+            //TODO 달력 초기화
             false
         }
         binding.elMenu.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
