@@ -23,9 +23,8 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager2.widget.ViewPager2
-import com.example.appdid.DTO.CodeMessageDTO
-import com.example.appdid.DTO.PayloadDTO
-import com.example.appdid.DTO.UserInfoDTO
+import com.bumptech.glide.Glide
+import com.example.appdid.DTO.*
 import com.example.appdid.RetrofitSet.RetrofitCreator
 import com.example.appdid.RetrofitSet.RetrofitService
 import com.example.appdid.bottomNavigation.Selected
@@ -38,9 +37,11 @@ import com.example.appdid.dialog.TeamParticiapteDialog
 import com.example.appdid.fragment.todo.AddTodoActivity
 import com.example.appdid.utility.MyApplication
 import com.example.appdid.utility.ServerUri
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.mikhaellopez.circularimageview.CircularImageView
@@ -73,7 +74,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dialogParticipateTeam:TeamParticiapteDialog
     private lateinit var dialogAddTeam:TeamCreateDialog
     private lateinit var groupId:String
-
+    private lateinit var retrofit:Retrofit
+    private lateinit var service: RetrofitService
 
 
     override fun onStart() {
@@ -119,7 +121,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-
+        retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
+        service=retrofit.create(RetrofitService::class.java)//인터페이스
         naviHeaderBinding=binding.navHeader // include 바인딩
         appBarBinding= binding.incAppBar // include 바인딩
         //val appbarView:View=findViewById(R.id.incAppBar) as View //include 태그 View를 가져오기 위함
@@ -136,6 +139,7 @@ class MainActivity : AppCompatActivity() {
         naviHeaderBinding.tvUserEmail.text=MyApplication.prefs.getString("email")
         naviHeaderBinding.tvUserName.text=MyApplication.prefs.getString("name")
         viewPager2Init()
+        loadProfilePhoto()
 
 
 
@@ -446,21 +450,26 @@ class MainActivity : AppCompatActivity() {
         val riversRef = storageRef.child("ProfileImages/" + imageUri.lastPathSegment)
         val uploadTask = riversRef.putFile(imageUri)
 
-        uploadTask.addOnCompleteListener { task ->
+        val urlTask = uploadTask.continueWithTask { task ->
+            if(!task.isSuccessful) {
+                task.exception?.let { throw it }
+            }
+            riversRef.downloadUrl
+        }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val downloadUri = task.result.toString()
                 val retrofit:Retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
                 val service: RetrofitService =retrofit.create(RetrofitService::class.java)//인터페이스
                 val call:Call<CodeMessageDTO> = service.setProfile(
-                    MyApplication.prefs.getString("id", ""),
-                    downloadUri,
-                    MyApplication.prefs.getString("token")
+                        MyApplication.prefs.getString("id", ""),
+                        downloadUri,
+                        MyApplication.prefs.getString("token")
                 )
 
                 call.enqueue(object : Callback<CodeMessageDTO> {
                     override fun onResponse(
-                        call: Call<CodeMessageDTO>,
-                        response: Response<CodeMessageDTO>
+                            call: Call<CodeMessageDTO>,
+                            response: Response<CodeMessageDTO>
                     ) {
                         if (response.isSuccessful) {
                             Log.e("Response", "SUCCESS")
@@ -497,8 +506,7 @@ class MainActivity : AppCompatActivity() {
 
     fun reFreshTeamList()
     {
-        val retrofit:Retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
-        val service:RetrofitService=retrofit.create(RetrofitService::class.java)
+
         val call: Call<PayloadDTO> =service.getProfile(mapOf(
                 "id" to MyApplication.prefs.getString("id",""),
         ),MyApplication.prefs.getString("token"))
@@ -538,6 +546,39 @@ class MainActivity : AppCompatActivity() {
             Log.e("WOW" ,expandableListAdapter.getGroup(groupPosition)._id + ", " + expandableListAdapter.getGroup(groupPosition).groupName)
             groupId=expandableListAdapter.getGroup(groupPosition)._id
             closeDrawer()
+            /*
+            val call:Call<TodoPayloadDTO> =service.getTodos(groupId,MyApplication.prefs.getString("token"))
+            call.enqueue(object:Callback<TodoPayloadDTO>
+            {
+                override fun onResponse(call: Call<TodoPayloadDTO>, response: Response<TodoPayloadDTO>) {
+                   if(response.isSuccessful)
+                   {
+                       Log.e("TODO",response.body()!!.payloads[1].title)
+                   }
+                }
+
+                override fun onFailure(call: Call<TodoPayloadDTO>, t: Throwable) {
+                    Log.e("TODO","ERROR")
+                }
+            })
+            */
+
+             val call:Call<ProjectsAndTodosPayloadDTO> =service.getProjectsAndTodos(groupId,MyApplication.prefs.getString("token"))
+            call.enqueue(object:Callback<ProjectsAndTodosPayloadDTO>
+            {
+                override fun onResponse(call: Call<ProjectsAndTodosPayloadDTO>, response: Response<ProjectsAndTodosPayloadDTO>) {
+                   if(response.isSuccessful)
+                   {
+                       Log.e("TODO",response!!.body().toString())
+                   }
+                }
+
+                override fun onFailure(call: Call<ProjectsAndTodosPayloadDTO>, t: Throwable) {
+                    Log.e("TODO","ERROR")
+                }
+            })
+
+
             //TODO 달력 초기화
             false
         }
@@ -554,5 +595,13 @@ class MainActivity : AppCompatActivity() {
         {
             binding.dlContainer.closeDrawer(GravityCompat.START)
         }
+    }
+
+    fun loadProfilePhoto()
+    {
+
+        Glide.with(this@MainActivity, ).load(Uri.parse(MyApplication.prefs.getString("profilePhoto"))).into(binding.navHeader.civProfile)
+
+
     }
 }

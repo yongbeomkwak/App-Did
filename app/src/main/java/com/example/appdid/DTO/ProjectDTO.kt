@@ -12,5 +12,7 @@ data class ProjectDTO(
         @SerializedName("groupId")
     val groupId: String,
         @SerializedName("projectName")
-    val projectName: String
+    val projectName: String,
+        @SerializedName("todos")
+    val todos: List<CalendarDayTodoDTO>
 )

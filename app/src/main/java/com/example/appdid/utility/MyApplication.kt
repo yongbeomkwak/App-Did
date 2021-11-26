@@ -11,7 +11,7 @@ class MyApplication : Application() {
         var userEmail:String?=null
         var userName:String?=null
         var userId:String?=null
-
+        var userProfilePhotoUri:String?=null
         var TeamInfo:List<UserGroupDTO> = mutableListOf()
 
     }
@@ -21,5 +21,6 @@ class MyApplication : Application() {
         userEmail=prefs.getString("email","noEmail")
         userName= prefs.getString("name","Noname")
         userId=prefs.getString("id","noId")
+        userProfilePhotoUri= prefs.getString("profilePhoto","noPP")
     }
 }
