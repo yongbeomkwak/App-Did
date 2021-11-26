@@ -23,6 +23,7 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.appdid.DTO.*
 import com.example.appdid.RetrofitSet.RetrofitCreator
 import com.example.appdid.RetrofitSet.RetrofitService
@@ -36,9 +37,11 @@ import com.example.appdid.dialog.TeamParticiapteDialog
 import com.example.appdid.fragment.todo.AddTodoActivity
 import com.example.appdid.utility.MyApplication
 import com.example.appdid.utility.ServerUri
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.mikhaellopez.circularimageview.CircularImageView
@@ -136,6 +139,7 @@ class MainActivity : AppCompatActivity() {
         naviHeaderBinding.tvUserEmail.text=MyApplication.prefs.getString("email")
         naviHeaderBinding.tvUserName.text=MyApplication.prefs.getString("name")
         viewPager2Init()
+        loadProfilePhoto()
 
 
 
@@ -446,20 +450,26 @@ class MainActivity : AppCompatActivity() {
         val riversRef = storageRef.child("ProfileImages/" + imageUri.lastPathSegment)
         val uploadTask = riversRef.putFile(imageUri)
 
-        uploadTask.addOnCompleteListener { task ->
+        val urlTask = uploadTask.continueWithTask { task ->
+            if(!task.isSuccessful) {
+                task.exception?.let { throw it }
+            }
+            riversRef.downloadUrl
+        }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val downloadUri = task.result.toString()
-
+                val retrofit:Retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
+                val service: RetrofitService =retrofit.create(RetrofitService::class.java)//인터페이스
                 val call:Call<CodeMessageDTO> = service.setProfile(
-                    MyApplication.prefs.getString("id", ""),
-                    downloadUri,
-                    MyApplication.prefs.getString("token")
+                        MyApplication.prefs.getString("id", ""),
+                        downloadUri,
+                        MyApplication.prefs.getString("token")
                 )
 
                 call.enqueue(object : Callback<CodeMessageDTO> {
                     override fun onResponse(
-                        call: Call<CodeMessageDTO>,
-                        response: Response<CodeMessageDTO>
+                            call: Call<CodeMessageDTO>,
+                            response: Response<CodeMessageDTO>
                     ) {
                         if (response.isSuccessful) {
                             Log.e("Response", "SUCCESS")
@@ -585,5 +595,13 @@ class MainActivity : AppCompatActivity() {
         {
             binding.dlContainer.closeDrawer(GravityCompat.START)
         }
+    }
+
+    fun loadProfilePhoto()
+    {
+
+        Glide.with(this@MainActivity, ).load(Uri.parse(MyApplication.prefs.getString("profilePhoto"))).into(binding.navHeader.civProfile)
+
+
     }
 }
