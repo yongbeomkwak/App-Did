@@ -193,18 +193,21 @@ class AddTodoActivity : AppCompatActivity() {
 
     fun getProjects()
     {
+
         projects= mutableListOf("해당 프로젝트를 선택해주세요",)
         projectsIds= mutableListOf("0",)
         val call:Call<ProjectPayloadDTO> =service.getProjects(teamId,MyApplication.prefs.getString("token"))
         call.enqueue(object:Callback<ProjectPayloadDTO>{
             override fun onResponse(call: Call<ProjectPayloadDTO>, response: Response<ProjectPayloadDTO>) {
+                Log.e("Teamid: ",response.toString())
+                Log.e("RESULT",response.body().toString())
                 if(response.isSuccessful)
                 {
                     val palyoad:List<ProjectDTO> =response.body()!!.payloads
 
                     for (project in palyoad)
                     {
-                        Log.d("Projects",project.projectName)
+                        Log.e("Projects",project.projectName)
                         projects.add(project.projectName)
                         projectsIds.add(project._id)
                     }
@@ -213,7 +216,7 @@ class AddTodoActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ProjectPayloadDTO>, t: Throwable) {
-                Log.e("RES","ERROR")
+                Log.e("ADD_RES",t.message.toString())
             }
         })
         //TODO groupId를 보내서 해당 그룹의 프로젝트들을 불러오는 것

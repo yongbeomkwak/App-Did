@@ -571,8 +571,11 @@ class MainActivity : AppCompatActivity() {
 
     fun loadProfilePhoto()
     {
+        if(MyApplication.prefs.getString("profilePhoto")!="null")
+        {
+            Glide.with(this@MainActivity, ).load(Uri.parse(MyApplication.prefs.getString("profilePhoto"))).into(binding.navHeader.civProfile)
+        }
 
-        Glide.with(this@MainActivity, ).load(Uri.parse(MyApplication.prefs.getString("profilePhoto"))).into(binding.navHeader.civProfile)
 
 
     }
