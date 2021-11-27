@@ -1,10 +1,10 @@
-package com.example.appdid.DTO
+package com.example.appdid.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class ProjectPayloadDTO(
+data class GroupPayloadDTO(
         @SerializedName("code")
-    val code: Int,
+        val code: Int,
         @SerializedName("payloads")
-    val payloads: List<ProjectDTO>
+        val payloads: GroupPayloadItem
 )

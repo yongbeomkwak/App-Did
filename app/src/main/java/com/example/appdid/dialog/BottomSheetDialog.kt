@@ -7,10 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.example.appdid.DTO.CodeMessageDTO
-import com.example.appdid.DTO.PayloadDTO
-import com.example.appdid.DTO.UserGroupDTO
+import com.example.appdid.dto.CodeMessageDTO
+import com.example.appdid.dto.UserGroupDTO
 import com.example.appdid.MainActivity
 import com.example.appdid.RetrofitSet.RetrofitCreator
 import com.example.appdid.RetrofitSet.RetrofitService

@@ -9,8 +9,7 @@ import android.widget.BaseExpandableListAdapter
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.fragment.app.FragmentManager
-import com.example.appdid.DTO.UserGroupDTO
-import com.example.appdid.DTO.UserInfoDTO
+import com.example.appdid.dto.UserGroupDTO
 import com.example.appdid.R
 import com.example.appdid.databinding.MenuChildBinding
 import com.example.appdid.databinding.MenuParentBinding

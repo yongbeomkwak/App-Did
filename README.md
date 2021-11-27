@@ -120,3 +120,9 @@
 ## 11/25 
 -   TODO리스트 작성 및 서버 연결
 -   해당 팀에 대한 Project 받아오기
+-   Todo 및 project 불러오기 
+
+## 11/27
+-   Calendar, Todo 파트 서버 연결 완료
+-   Calendar Todo 체크 여부에 따른 색 변경
+-   Todo 파트 프로젝트 표시, 프로그래스바, Todo list 표시 완료

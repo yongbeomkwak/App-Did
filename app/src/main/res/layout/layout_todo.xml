@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="androidx.core.content.ContextCompat"/>
+        <variable
+            name="todoDTO"
+            type="com.example.appdid.dto.CalendarDayTodoDTO" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/todo_round"
+        android:backgroundTint="@color/white"
+        android:padding="10dp">
+
+        <CheckBox
+            android:id="@+id/check_todo"
+            android:layout_width="25dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginHorizontal="10dp"
+            tools:todo_checked="@{todoDTO.check}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/check_todo"
+            android:layout_centerVertical="true"
+            android:text="@{todoDTO.title}"
+            android:textSize="17dp"
+            android:layout_marginStart="10dp"/>
+
+        <ImageButton
+            android:id="@+id/button_todo_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_cancel_presentation_24"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:layout_marginHorizontal="10dp"/>
+    </RelativeLayout>
+
+</layout>

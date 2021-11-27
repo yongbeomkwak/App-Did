@@ -23,9 +23,8 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager2.widget.ViewPager2
-import com.example.appdid.DTO.CodeMessageDTO
-import com.example.appdid.DTO.PayloadDTO
-import com.example.appdid.DTO.UserInfoDTO
+import com.bumptech.glide.Glide
+import com.example.appdid.dto.*
 import com.example.appdid.RetrofitSet.RetrofitCreator
 import com.example.appdid.RetrofitSet.RetrofitService
 import com.example.appdid.bottomNavigation.Selected
@@ -38,9 +37,11 @@ import com.example.appdid.dialog.TeamParticiapteDialog
 import com.example.appdid.fragment.todo.AddTodoActivity
 import com.example.appdid.utility.MyApplication
 import com.example.appdid.utility.ServerUri
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.mikhaellopez.circularimageview.CircularImageView
@@ -73,7 +74,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dialogParticipateTeam:TeamParticiapteDialog
     private lateinit var dialogAddTeam:TeamCreateDialog
     private lateinit var groupId:String
-
+    private lateinit var retrofit:Retrofit
+    private lateinit var service: RetrofitService
+    private lateinit var bottom_adapter: com.example.appdid.bottomNavigation.PagerAdapter
 
 
     override fun onStart() {
@@ -136,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         naviHeaderBinding.tvUserEmail.text=MyApplication.prefs.getString("email")
         naviHeaderBinding.tvUserName.text=MyApplication.prefs.getString("name")
         viewPager2Init()
-
+        loadProfilePhoto()
 
 
         /*
@@ -238,8 +241,9 @@ class MainActivity : AppCompatActivity() {
 
     fun viewPager2Init() {   // ViewPager2 이니셜라이저
         view_pager2 = binding.viewPager
-        view_pager2.adapter =
-            com.example.appdid.bottomNavigation.PagerAdapter(supportFragmentManager, lifecycle)
+        bottom_adapter = com.example.appdid.bottomNavigation.PagerAdapter(supportFragmentManager, lifecycle)
+        view_pager2.adapter = bottom_adapter
+
 
         bottomNaviInit()
         val page_listener = Selected(view_pager2, bottom_navi_view)
@@ -418,7 +422,6 @@ class MainActivity : AppCompatActivity() {
         if(File(folderPath+fileName).exists()) //파일 존재 시
         {
             File(folderPath+fileName).delete() //삭제
-            Log.e("Value", "Delete")
 
         }
 
@@ -446,7 +449,12 @@ class MainActivity : AppCompatActivity() {
         val riversRef = storageRef.child("ProfileImages/" + imageUri.lastPathSegment)
         val uploadTask = riversRef.putFile(imageUri)
 
-        uploadTask.addOnCompleteListener { task ->
+        val urlTask = uploadTask.continueWithTask { task ->
+            if(!task.isSuccessful) {
+                task.exception?.let { throw it }
+            }
+            riversRef.downloadUrl
+        }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val downloadUri = task.result.toString()
                 val retrofit:Retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
@@ -463,7 +471,6 @@ class MainActivity : AppCompatActivity() {
                         response: Response<CodeMessageDTO>
                     ) {
                         if (response.isSuccessful) {
-                            Log.e("Response", "SUCCESS")
                             Toast.makeText(applicationContext, "프로필 사진을 변경했습니다.", Toast.LENGTH_SHORT).show()
 
                         }
@@ -513,6 +520,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("Response",userInfo.toString())
                     MyApplication.TeamInfo=payload.payloads[0].userGroupDTOS
                     groupId=payload.payloads[0].userGroupDTOS[0]._id //개인 그룹으로 초기
+                    MyApplication.prefs.setString("groupId", groupId)
 
                 }
             }
@@ -537,8 +545,12 @@ class MainActivity : AppCompatActivity() {
         binding.elMenu.setOnGroupClickListener { parent, v, groupPosition, id ->
             Log.e("WOW" ,expandableListAdapter.getGroup(groupPosition)._id + ", " + expandableListAdapter.getGroup(groupPosition).groupName)
             groupId=expandableListAdapter.getGroup(groupPosition)._id
+            MyApplication.prefs.setString("groupId", groupId)
             closeDrawer()
+
             //TODO 달력 초기화
+            bottom_adapter = com.example.appdid.bottomNavigation.PagerAdapter(supportFragmentManager, lifecycle)
+            view_pager2.adapter = bottom_adapter
             false
         }
         binding.elMenu.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
@@ -554,5 +566,13 @@ class MainActivity : AppCompatActivity() {
         {
             binding.dlContainer.closeDrawer(GravityCompat.START)
         }
+    }
+
+    fun loadProfilePhoto()
+    {
+
+        Glide.with(this@MainActivity, ).load(Uri.parse(MyApplication.prefs.getString("profilePhoto"))).into(binding.navHeader.civProfile)
+
+
     }
 }

@@ -7,9 +7,9 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.appdid.DTO.CodeMessageDTO
-import com.example.appdid.DTO.ProjectDTO
-import com.example.appdid.DTO.ProjectPayloadDTO
+import com.example.appdid.dto.CodeMessageDTO
+import com.example.appdid.dto.ProjectDTO
+import com.example.appdid.dto.ProjectPayloadDTO
 import com.example.appdid.R
 import com.example.appdid.RetrofitSet.RetrofitCreator
 import com.example.appdid.RetrofitSet.RetrofitService
@@ -45,7 +45,7 @@ class AddTodoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         teamId=intent.getStringExtra("groupId").toString()
-        toDoColor=String.format("#%06X", (0xFFFFFF and  R.color.primary_color)) //기본 색
+        toDoColor="#2062AF" //기본 색
 
         retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
         service=retrofit.create(RetrofitService::class.java)
@@ -72,7 +72,7 @@ class AddTodoActivity : AppCompatActivity() {
                     // TODO("Not yet implemented")
                 }
             })
-                .setDefaultColorButton(R.color.primary_color)
+                .setDefaultColorButton(Color.parseColor(toDoColor))
                 .setColumns(5)
                 .disableDefaultButtons(true)
                 .setRoundColorButton(true) //동그란 색깔 화면

@@ -2,6 +2,7 @@ package com.example.appdid.fragment.calendar.todo.week
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
@@ -31,12 +32,16 @@ class CalendarWeekTodoAdapter () : ListAdapter<CalendarWeekTodoInfo, CalendarWee
 
         fun bind(item: CalendarWeekTodoInfo) { // Todo 바인딩
             binding.calendarWeekTodoInfo = item
-            binding.weekTodoTable.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    binding.weekTodoTable.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    setDayTodoList(item)
-                }
-            })
+            try {
+                setDayTodoList(item)
+            } catch (e: Exception) {
+                binding.weekTodoTable.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        binding.weekTodoTable.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        setDayTodoList(item)
+                    }
+                })
+            }
             binding.executePendingBindings()
         }
 
@@ -83,8 +88,13 @@ class CalendarWeekTodoAdapter () : ListAdapter<CalendarWeekTodoInfo, CalendarWee
                 var block: TextView = TextView(binding.root.context)
                 block.setText(todoList[i].title)
                 block.setBackgroundResource(R.drawable.calendar_todo_round)
-                block.backgroundTintList = ColorStateList.valueOf(
-                    ContextCompat.getColor(binding.root.context, todoList[i].color))
+                if (todoList[i].check) {
+                    block.backgroundTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(binding.root.context, R.color.gray))
+                } else {
+                    block.backgroundTintList = ColorStateList.valueOf(
+                        Color.parseColor(todoList[i].color))
+                }
                 block.typeface = Typeface.DEFAULT_BOLD
                 block.setPadding(10, 0, 0, 0)
 

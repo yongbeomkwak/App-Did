@@ -1,4 +1,4 @@
-package com.example.appdid.DTO
+package com.example.appdid.dto
 
 import com.google.gson.annotations.SerializedName
 
@@ -6,7 +6,7 @@ data class TodoPayloadDTO (
     @SerializedName("code")
     val code: Int,
 
-    @SerializedName("payload")
+    @SerializedName("payloads")
     val payloads: List<CalendarDayTodoDTO>
         ) {
 

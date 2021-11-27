@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="androidx.core.content.ContextCompat"/>
+        <variable
+            name="todoProjectInfo"
+            type="com.example.appdid.fragment.todo.project.TodoProjectInfo" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/todo_project_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/todo_round"
+        android:layout_margin="5dp"
+        android:padding="20dp"
+        tools:project_background_tint="@{todoProjectInfo.color}">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:id="@+id/text_project_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="@{todoProjectInfo.totle}"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
+
+            <ImageButton
+                android:id="@+id/button_todo_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_settings_24"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:background="@android:color/transparent"/>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/todo_round"
+                android:backgroundTint="@color/editText_background"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                tools:progresswidth="@{todoProjectInfo.progress}"
+                android:layout_height="wrap_content"
+                android:background="@drawable/todo_round"
+                android:backgroundTint="@color/editText_background"/>
+        </FrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/todo_list_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/todo_round"
+            android:backgroundTint="@android:color/transparent"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    </LinearLayout>
+
+</layout>

@@ -8,12 +8,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.appdid.DTO.GroupPayloadDTO
-import com.example.appdid.DTO.PayloadDTO
-import com.example.appdid.DTO.TeamMemberDTO
+import com.example.appdid.dto.GroupPayloadDTO
+import com.example.appdid.dto.TeamMemberDTO
 import com.example.appdid.RetrofitSet.RetrofitCreator
 import com.example.appdid.RetrofitSet.RetrofitService
 import com.example.appdid.adapter.TeamMemberAdapter
