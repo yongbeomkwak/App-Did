@@ -2,11 +2,9 @@ package com.example.appdid.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appdid.DTO.TeamMemberDTO
+import com.example.appdid.dto.TeamMemberDTO
 import com.example.appdid.databinding.SubLayoutTeamMemberBinding
 
 // 뷰바인딩을 이용한 Adapter설정

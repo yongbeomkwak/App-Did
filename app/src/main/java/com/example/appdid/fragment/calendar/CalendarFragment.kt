@@ -1,23 +1,16 @@
 package com.example.appdid.fragment.calendar
 
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.example.appdid.DTO.MyTodoDTO
-import com.example.appdid.DTO.MyTodoListDTO
-import com.example.appdid.DTO.TestDto
+import com.example.appdid.dto.MyTodoListDTO
 import com.example.appdid.RetrofitSet.RetrofitCreator
 import com.example.appdid.RetrofitSet.RetrofitService
-import com.example.appdid.bottomNavigation.Selected
 import com.example.appdid.databinding.FragmentCalendarBinding
 import com.example.appdid.fragment.calendar.month.CalendarMonthPagerAdapter
 import com.example.appdid.utility.ServerUri
@@ -27,7 +20,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import java.util.*
-import com.github.dewinjm.monthyearpicker.MonthYearPickerDialog
 
 class CalendarFragment : Fragment() {   // 달력 Fragment
     private var _binding: FragmentCalendarBinding? = null

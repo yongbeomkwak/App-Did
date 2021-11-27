@@ -7,14 +7,11 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.example.appdid.DTO.MyTodoListDTO
-import com.example.appdid.DTO.CodeMessageDTO
-import com.example.appdid.DTO.PayloadDTO
-import com.example.appdid.DTO.UserInfoDTO
+import com.example.appdid.dto.PayloadDTO
+import com.example.appdid.dto.UserInfoDTO
 import com.example.appdid.RetrofitSet.RetrofitCreator
 import com.example.appdid.RetrofitSet.RetrofitService
 import com.example.appdid.databinding.ActivityLoginBinding
-import com.example.appdid.databinding.ActivityMainBinding
 import com.example.appdid.utility.MyApplication
 import com.example.appdid.utility.ServerUri
 import com.google.android.gms.auth.api.Auth

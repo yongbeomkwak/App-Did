@@ -18,18 +18,10 @@
     <color name="calendar_clear">#00000000</color>
     <color name="calendar_opaque">#0A000000</color>
 
-    <color name="todo_1">#FF6F6F</color>
-    <color name="todo_2">#6F97FF</color>
-    <color name="todo_3">#6FFF7D</color>
-    <color name="todo_4">#FFE86F</color>
-    <color name="todo_5">#D96FFF</color>
-    <color name="todo_6">#FFA36F</color>
-    <color name="todo_7">#6FFFCB</color>
-    <color name="todo_8">#D9FF6F</color>
-    <color name="todo_9">#FF6FC5</color>
-
 
     <color name="editText_background">#C4C4C4</color>
+
+    <color name="gray">#DDDDDD</color>
 
 
 </resources>

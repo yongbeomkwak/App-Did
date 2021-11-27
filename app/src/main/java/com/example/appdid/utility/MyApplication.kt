@@ -1,7 +1,7 @@
 package com.example.appdid.utility
 
 import android.app.Application
-import com.example.appdid.DTO.UserGroupDTO
+import com.example.appdid.dto.UserGroupDTO
 
 class MyApplication : Application() {
 

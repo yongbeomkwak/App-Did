@@ -5,8 +5,10 @@
       <map>
         <entry key="app/src/main/res/drawable/calendar_todo_round.xml" value="0.19114583333333332" />
         <entry key="app/src/main/res/drawable/day_border.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_cancel_presentation_24.xml" value="0.18229166666666666" />
         <entry key="app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/drawable/navi_border.xml" value="0.19895833333333332" />
+        <entry key="app/src/main/res/drawable/todo_round.xml" value="0.19166666666666668" />
         <entry key="app/src/main/res/layout/activity_add_todo.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.15208333333333332" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
@@ -16,8 +18,11 @@
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.1047242719928868" />
         <entry key="app/src/main/res/layout/fragment_calendar_month.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_month.xml" value="0.1390625" />
+        <entry key="app/src/main/res/layout/fragment_todo.xml" value="0.17552083333333332" />
         <entry key="app/src/main/res/layout/layout_calendar_day.xml" value="0.1390625" />
         <entry key="app/src/main/res/layout/layout_calendar_todo.xml" value="0.175" />
+        <entry key="app/src/main/res/layout/layout_todo.xml" value="0.28888936237726764" />
+        <entry key="app/src/main/res/layout/layout_todo_project.xml" value="0.2" />
         <entry key="app/src/main/res/layout/layout_week_todo.xml" value="0.1" />
         <entry key="app/src/main/res/layout/menu_child.xml" value="0.14322916666666666" />
         <entry key="app/src/main/res/layout/menu_parent.xml" value="0.14322916666666666" />
