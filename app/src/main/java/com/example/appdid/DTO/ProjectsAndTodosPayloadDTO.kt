@@ -1,4 +1,4 @@
-package com.example.appdid.DTO
+package com.example.appdid.dto
 
 data class ProjectsAndTodosPayloadDTO(
     val code: Int,
