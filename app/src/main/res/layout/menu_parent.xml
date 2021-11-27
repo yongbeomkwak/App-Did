@@ -13,6 +13,7 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       android:layout_marginLeft="16dp"
+      android:src="@drawable/ic_baseline_settings_24"
       ></ImageView>
 
     <TextView
