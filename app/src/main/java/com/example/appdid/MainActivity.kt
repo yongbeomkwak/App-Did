@@ -122,7 +122,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-
+        retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
+        service=retrofit.create(RetrofitService::class.java)//인터페이스
         naviHeaderBinding=binding.navHeader // include 바인딩
         appBarBinding= binding.incAppBar // include 바인딩
         //val appbarView:View=findViewById(R.id.incAppBar) as View //include 태그 View를 가져오기 위함
@@ -460,15 +461,15 @@ class MainActivity : AppCompatActivity() {
                 val retrofit:Retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
                 val service: RetrofitService =retrofit.create(RetrofitService::class.java)//인터페이스
                 val call:Call<CodeMessageDTO> = service.setProfile(
-                    MyApplication.prefs.getString("id", ""),
-                    downloadUri,
-                    MyApplication.prefs.getString("token")
+                        MyApplication.prefs.getString("id", ""),
+                        downloadUri,
+                        MyApplication.prefs.getString("token")
                 )
 
                 call.enqueue(object : Callback<CodeMessageDTO> {
                     override fun onResponse(
-                        call: Call<CodeMessageDTO>,
-                        response: Response<CodeMessageDTO>
+                            call: Call<CodeMessageDTO>,
+                            response: Response<CodeMessageDTO>
                     ) {
                         if (response.isSuccessful) {
                             Toast.makeText(applicationContext, "프로필 사진을 변경했습니다.", Toast.LENGTH_SHORT).show()
@@ -504,8 +505,7 @@ class MainActivity : AppCompatActivity() {
 
     fun reFreshTeamList()
     {
-        val retrofit:Retrofit=RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
-        val service:RetrofitService=retrofit.create(RetrofitService::class.java)
+
         val call: Call<PayloadDTO> =service.getProfile(mapOf(
                 "id" to MyApplication.prefs.getString("id",""),
         ),MyApplication.prefs.getString("token"))
@@ -547,6 +547,7 @@ class MainActivity : AppCompatActivity() {
             groupId=expandableListAdapter.getGroup(groupPosition)._id
             MyApplication.prefs.setString("groupId", groupId)
             closeDrawer()
+
 
             //TODO 달력 초기화
             bottom_adapter = com.example.appdid.bottomNavigation.PagerAdapter(supportFragmentManager, lifecycle)

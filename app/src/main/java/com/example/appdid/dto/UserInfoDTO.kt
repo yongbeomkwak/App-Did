@@ -10,11 +10,13 @@ data class UserInfoDTO(
         @SerializedName("name")
         val name: String,
         @SerializedName("email")
-        val email: String
+        val email: String,
+        @SerializedName("avatarSrc")
+        val profilePhoto:String
 
 
 ) {
         override fun toString(): String {
-                return  " ${this._id}\n ${this.name}\n ${this.userGroupDTOS}\n ${this.email}\n"
+                return  " ${this._id}\n ${this.name}\n ${this.userGroupDTOS}\n ${this.email} ${this.profilePhoto}\n"
         }
 }

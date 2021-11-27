@@ -66,11 +66,21 @@ class LoginActivity : AppCompatActivity() {
                                 {
                                     val payload: PayloadDTO=response.body()!!
                                     val userInfo: UserInfoDTO = payload.payloads[0]
-                                      Log.d("Response",userInfo.toString())
+                                      Log.d("UserInfoInfo",userInfo.toString())
                                     MyApplication.prefs.setString("name",userInfo.name) //이름
                                     MyApplication.prefs.setString("email",userInfo.email) //email
                                     MyApplication.prefs.setString("id",userInfo._id)
                                     MyApplication.TeamInfo=payload.payloads[0].userGroupDTOS
+                                    if(userInfo.profilePhoto==null) //프로필 이미지 없을 시
+                                    {
+                                        Log.d("UserInfoInfo2","null")
+                                        MyApplication.prefs.setString("profilePhoto","null")
+                                    }
+                                    else
+                                    {
+                                        MyApplication.prefs.setString("profilePhoto",userInfo.profilePhoto)
+                                    }
+
 
 
                                 }
