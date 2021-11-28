@@ -36,6 +36,8 @@ class CalendarMonthFragment(var year: Int, var month: Int) : Fragment() { //Cale
     lateinit var dayList: MutableList<CalendarInfo> //각 날짜 배열
     var recyclerHeight = 0 // 달력 높이
 
+    lateinit var calendarDayAdapter: CalendarDayAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,7 +46,7 @@ class CalendarMonthFragment(var year: Int, var month: Int) : Fragment() { //Cale
         _binding = FragmentCalendarMonthBinding.inflate(inflater, container, false)
         var root: View = binding.root
 
-        var calendarDayAdapter = CalendarDayAdapter()
+        calendarDayAdapter = CalendarDayAdapter()
         binding.calendarMonthRecycler.setHasFixedSize(true)
         binding.calendarMonthRecycler.adapter = calendarDayAdapter
 
@@ -225,7 +227,6 @@ class CalendarMonthFragment(var year: Int, var month: Int) : Fragment() { //Cale
                         calendarWeekTodoInfo.calendarDayTodoInfoWeek.sortBy { it.beginCalendar }
                         weekList[i] = calendarWeekTodoInfo
                     }
-
                     calendarWeekTodoAdapter.submitList(weekList)
                 }
                 else{

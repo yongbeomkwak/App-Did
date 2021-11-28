@@ -65,6 +65,21 @@ interface RetrofitService {
 
         @GET("todo")
         fun getTodos(@QueryMap querys: Map<String, String>, @Header("Authorization") token:String) :Call<TodoPayloadDTO>
+
+        @POST("project")
+        fun setProject(@QueryMap querys: Map<String, String>, @Header("Authorization") token:String) :Call<ProjectDTO>
+
+        @PUT("project/{id}")
+        fun setProjectTitle(@Path("id") id: String, @Query("projectName") query: String, @Header("Authorization") token:String) :Call<CodeMessageDTO>
+
+        @DELETE("todo/{id}")
+        fun deleteTodo(@Path("id") id: String, @Header("Authorization") token:String) :Call<CodeMessageDTO>
+
+        @DELETE("project/{id}")
+        fun deleteProject(@Path("id") id: String, @Header("Authorization") token:String) :Call<CodeMessageDTO>
+
+        @PUT("todo/{id}")
+        fun checkTodo(@Path("id") id: String, @Query("check") check: Boolean, @Header("Authorization") token:String) :Call<CodeMessageDTO>
 }
 
 

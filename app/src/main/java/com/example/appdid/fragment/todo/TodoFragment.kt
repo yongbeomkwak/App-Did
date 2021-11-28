@@ -12,6 +12,8 @@ import com.example.appdid.dto.ProjectsAndTodosPayloadDTO
 import com.example.appdid.RetrofitSet.RetrofitCreator
 import com.example.appdid.RetrofitSet.RetrofitService
 import com.example.appdid.databinding.FragmentTodoBinding
+import com.example.appdid.dto.CalendarDayTodoDTO
+import com.example.appdid.dto.ProjectDTO
 import com.example.appdid.fragment.calendar.CalendarFragment
 import com.example.appdid.fragment.todo.project.TodoProjectAdapter
 import com.example.appdid.fragment.todo.project.TodoProjectInfo
@@ -33,6 +35,8 @@ class TodoFragment: Fragment() {    // Todo리스트 Fragment
     lateinit var recyclerView: RecyclerView
     lateinit var buttonAdd: ImageButton
 
+    var projectList: MutableList<TodoProjectInfo> = mutableListOf()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,15 +47,37 @@ class TodoFragment: Fragment() {    // Todo리스트 Fragment
 
         recyclerView = binding.todoProjectRecycler
         adapter = TodoProjectAdapter()
-        recyclerView.adapter = adapter
 
         loadTodoProject(adapter)
 
         buttonAdd = binding.buttonAddTodoProject
         buttonAdd.setOnClickListener{
+            addProject()
         }
 
         return root
+    }
+
+    fun addProject() {
+        val retrofit: Retrofit = RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
+        val service: RetrofitService = retrofit.create(RetrofitService::class.java)
+
+        val call:Call<ProjectDTO> = service.setProject(mapOf(
+            "groupId" to MyApplication.prefs.getString("groupId"),
+            "projectName" to "title"
+        ), MyApplication.prefs.getString("token"))
+        call.enqueue(object: Callback<ProjectDTO>{
+            override fun onResponse(call: Call<ProjectDTO>, response: Response<ProjectDTO>) {
+                adapter = TodoProjectAdapter()
+                loadTodoProject(adapter)
+                MyApplication.prefs.setString("update", "update")
+            }
+
+            override fun onFailure(call: Call<ProjectDTO>, t: Throwable) {
+                Log.e("AddProject","ERROR")
+            }
+
+        })
     }
 
     fun loadTodoProject(adapter: TodoProjectAdapter) { // 서버에서 todo 정보 가져옴
@@ -66,7 +92,7 @@ class TodoFragment: Fragment() {    // Todo리스트 Fragment
             override fun onResponse(call: Call<ProjectsAndTodosPayloadDTO>, response: Response<ProjectsAndTodosPayloadDTO>) {
                 if(response.isSuccessful)
                 {
-                    var projectList: MutableList<TodoProjectInfo> = mutableListOf()
+                    projectList.clear()
                     for (payload in response.body()!!.payloads) {
                         projectList.add(payload.toInfo())
                         if (projectList.last().todos.size > 0) {
@@ -97,6 +123,7 @@ class TodoFragment: Fragment() {    // Todo리스트 Fragment
     }
 
     fun initTodoProject(adapter: TodoProjectAdapter, projectList: MutableList<TodoProjectInfo>) {
+        recyclerView.adapter = adapter
         adapter.submitList(projectList)
     }
 }

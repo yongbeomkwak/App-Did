@@ -10,11 +10,14 @@
     </data>
 
     <RelativeLayout
+        android:id="@+id/todo_relative"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/todo_round"
         android:backgroundTint="@color/white"
-        android:padding="10dp">
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="3dp"
+        android:layout_marginVertical="5dp">
 
         <CheckBox
             android:id="@+id/check_todo"
@@ -26,6 +29,7 @@
             tools:todo_checked="@{todoDTO.check}" />
 
         <TextView
+            android:id="@+id/text_todo_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/check_todo"
