@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity() {
             }
             else
             {
-                reFreshTeamList()
+                reFreshTeamList(false)
                 binding.dlContainer.openDrawer(GravityCompat.START)
             }
         }
@@ -172,7 +172,7 @@ class MainActivity : AppCompatActivity() {
         dialogParticipateTeam= TeamParticiapteDialog(this)
         binding.llTeamParticipaate.setOnClickListener(teamParticipateListener)
         binding.llTeamAdd.setOnClickListener(teamAddListener)
-        reFreshTeamList()
+        reFreshTeamList(true)
 
         setContentView(binding.root)
 
@@ -508,7 +508,7 @@ class MainActivity : AppCompatActivity() {
         overridePendingTransition(R.anim.slide_right_enter,R.anim.slide_left_exit) //finish()호출 시 에니메이션 설정,툴바 뒤로가기를 위해
     }
 
-    fun reFreshTeamList()
+    fun reFreshTeamList(setGroup: Boolean)
     {
 
         val call: Call<PayloadDTO> =service.getProfile(mapOf(
@@ -524,9 +524,12 @@ class MainActivity : AppCompatActivity() {
                     val userInfo: UserInfoDTO = payload.payloads[0]
                     Log.d("Response",userInfo.toString())
                     MyApplication.TeamInfo=payload.payloads[0].userGroupDTOS
-                    groupId=payload.payloads[0].userGroupDTOS[0]._id //개인 그룹으로 초기
-                    MyApplication.prefs.setString("groupId", groupId)
-                    binding.incAppBar.appBar.title = payload.payloads[0].userGroupDTOS[0].groupName
+                    if(setGroup) {
+                        groupId = payload.payloads[0].userGroupDTOS[0]._id //개인 그룹으로 초기
+                        MyApplication.prefs.setString("groupId", groupId)
+                        binding.incAppBar.appBar.title =
+                            payload.payloads[0].userGroupDTOS[0].groupName
+                    }
 
                 }
             }
@@ -549,9 +552,9 @@ class MainActivity : AppCompatActivity() {
         binding.elMenu.setAdapter(expandableListAdapter)
 
         binding.elMenu.setOnGroupClickListener { parent, v, groupPosition, id ->
-            Log.e("WOW" ,expandableListAdapter.getGroup(groupPosition)._id + ", " + expandableListAdapter.getGroup(groupPosition).groupName)
             groupId=expandableListAdapter.getGroup(groupPosition)._id
             MyApplication.prefs.setString("groupId", groupId)
+            Log.e("WOW", groupId.toString() + " lsdfahjasdfslgj")
             binding.incAppBar.appBar.title = expandableListAdapter.getGroup(groupPosition).groupName
             closeDrawer()
 
@@ -571,6 +574,7 @@ class MainActivity : AppCompatActivity() {
     fun loadNewAdapter() {
         bottom_adapter = com.example.appdid.bottomNavigation.PagerAdapter(supportFragmentManager, lifecycle)
         view_pager2.adapter = bottom_adapter
+        bottom_navi_view.selectedItemId = R.id.item_calendar
     }
     fun closeDrawer()
     {

@@ -72,7 +72,7 @@ class BottomSheetDialog(private val team:UserGroupDTO) : BottomSheetDialogFragme
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        (context as MainActivity).reFreshTeamList()
+        (context as MainActivity).reFreshTeamList(true)
         (context as MainActivity).closeDrawer()
 
 
