@@ -10,9 +10,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
@@ -20,8 +17,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.view.GravityCompat
-import androidx.core.view.get
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.appdid.dto.*
@@ -37,11 +32,8 @@ import com.example.appdid.dialog.TeamParticiapteDialog
 import com.example.appdid.fragment.todo.AddTodoActivity
 import com.example.appdid.utility.MyApplication
 import com.example.appdid.utility.ServerUri
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.mikhaellopez.circularimageview.CircularImageView
@@ -58,6 +50,8 @@ import java.lang.Exception
 import java.lang.Integer.min
 
 class MainActivity : AppCompatActivity() {
+
+    private val REQUEST_ADD_TODO = 1
 
     private lateinit var binding: ActivityMainBinding // 일일이 R.id.*를 하지 않기 위한 바인딩
     private lateinit var view_pager2: ViewPager2 // 달력, todo리스트 화면전환을 위한 ViewPager2
@@ -166,7 +160,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_AddTodo -> {
                     val intent:Intent=Intent(applicationContext,AddTodoActivity::class.java)
                     intent.putExtra("groupId",groupId)
-                    startActivity(intent)
+                    startActivityForResult(intent, REQUEST_ADD_TODO)
                 }
             }
             false
@@ -182,6 +176,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_ADD_TODO && resultCode == RESULT_OK) {
+            loadNewAdapter()
+        }
+    }
+
     val profileClickListener=object:View.OnClickListener
     {
         override fun onClick(v: View?) {
@@ -245,11 +247,8 @@ class MainActivity : AppCompatActivity() {
         bottom_adapter = com.example.appdid.bottomNavigation.PagerAdapter(supportFragmentManager, lifecycle)
         view_pager2.adapter = bottom_adapter
 
-
         bottomNaviInit()
         val page_listener = Selected(view_pager2, bottom_navi_view)
-
-        view_pager2.registerOnPageChangeCallback(page_listener.PageChangeCallback())
         view_pager2.setUserInputEnabled(false)
     }
 
@@ -268,6 +267,19 @@ class MainActivity : AppCompatActivity() {
                 true
             }
         }
+
+//        view_pager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+//            override fun onPageSelected(position: Int) {
+//                super.onPageSelected(position)
+//                if (MyApplication.prefs.getString("update").equals("update")) {
+//                    MyApplication.prefs.setString("update", "done")
+//                    Log.e("WOW", "UPDATE")
+//                    loadNewAdapter()
+//                } else {
+//                    Log.e("WOW", MyApplication.prefs.getString("update"))
+//                }
+//            }
+//        })
     }
 
 
@@ -550,8 +562,7 @@ class MainActivity : AppCompatActivity() {
 
 
             //TODO 달력 초기화
-            bottom_adapter = com.example.appdid.bottomNavigation.PagerAdapter(supportFragmentManager, lifecycle)
-            view_pager2.adapter = bottom_adapter
+            loadNewAdapter()
             false
         }
         binding.elMenu.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
@@ -560,6 +571,11 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
+    }
+
+    fun loadNewAdapter() {
+        bottom_adapter = com.example.appdid.bottomNavigation.PagerAdapter(supportFragmentManager, lifecycle)
+        view_pager2.adapter = bottom_adapter
     }
     fun closeDrawer()
     {

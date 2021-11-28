@@ -1,6 +1,7 @@
 package com.example.appdid.fragment.todo
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -99,6 +100,8 @@ class AddTodoActivity : AppCompatActivity() {
                     if(response.isSuccessful)
                     {
                         Toast.makeText(applicationContext,response.body()!!.message,Toast.LENGTH_SHORT).show()
+                        val intent = Intent()
+                        setResult(RESULT_OK, intent)
                         finish()
                     }
                 }
@@ -194,8 +197,8 @@ class AddTodoActivity : AppCompatActivity() {
     fun getProjects()
     {
 
-        projects= mutableListOf("해당 프로젝트를 선택해주세요",)
-        projectsIds= mutableListOf("0",)
+        projects= mutableListOf("해당 프로젝트를 선택해주세요")
+        projectsIds= mutableListOf("0")
         val call:Call<ProjectPayloadDTO> =service.getProjects(teamId,MyApplication.prefs.getString("token"))
         call.enqueue(object:Callback<ProjectPayloadDTO>{
             override fun onResponse(call: Call<ProjectPayloadDTO>, response: Response<ProjectPayloadDTO>) {

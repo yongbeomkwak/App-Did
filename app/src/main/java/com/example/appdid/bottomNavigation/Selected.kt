@@ -14,7 +14,7 @@ class Selected (view_pager2: ViewPager2, bottom_navi_view: BottomNavigationView)
         this.bottom_navi_view = bottom_navi_view
     }
 
-    inner class PageChangeCallback: ViewPager2.OnPageChangeCallback() { // ViewPage2 화면 전
+    inner class PageChangeCallback(function: () -> Unit) : ViewPager2.OnPageChangeCallback() { // ViewPage2 화면 전
         override fun onPageSelected(position: Int) { // 화면 전환시 호출되는 이벤환
             super.onPageSelected(position)
             bottom_navi_view.selectedItemId = when (position) {
