@@ -52,6 +52,7 @@ class TodoFragment: Fragment() {    // Todo리스트 Fragment
 
         buttonAdd = binding.buttonAddTodoProject
         buttonAdd.setOnClickListener{
+            buttonAdd.isClickable = false
             addProject()
         }
 
@@ -71,10 +72,12 @@ class TodoFragment: Fragment() {    // Todo리스트 Fragment
                 adapter = TodoProjectAdapter()
                 loadTodoProject(adapter)
                 MyApplication.prefs.setString("update", "update")
+                buttonAdd.isClickable = true
             }
 
             override fun onFailure(call: Call<ProjectDTO>, t: Throwable) {
                 Log.e("AddProject","ERROR")
+                buttonAdd.isClickable = true
             }
 
         })
@@ -85,7 +88,6 @@ class TodoFragment: Fragment() {    // Todo리스트 Fragment
         val retrofit: Retrofit = RetrofitCreator.defaultRetrofit(ServerUri.MyServer)
         val service: RetrofitService = retrofit.create(RetrofitService::class.java)
 
-        Log.e("WOW", "GROUPID" + groupId)
         val call: Call<ProjectsAndTodosPayloadDTO> =service.getProjectsAndTodos(groupId,MyApplication.prefs.getString("token"))
         call.enqueue(object: Callback<ProjectsAndTodosPayloadDTO>
         {
@@ -107,7 +109,7 @@ class TodoFragment: Fragment() {    // Todo리스트 Fragment
                         }
                         if (projectList.last().todos.size > 0) {
                             projectList.last().progress =
-                                projectList.last().progress / projectList.last().todos.size * 100
+                                ((projectList.last().progress.toDouble() / projectList.last().todos.size.toDouble()) * 100).toInt()
                         }
                     }
 

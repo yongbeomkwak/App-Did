@@ -90,6 +90,7 @@ class TodoListAdapter () : ListAdapter<CalendarDayTodoDTO, TodoListAdapter.ViewH
                     response: Response<CodeMessageDTO>
                 ) {
                     if (response.isSuccessful) {
+                        MyApplication.prefs.setString("update", "update")
                     }
                 }
 

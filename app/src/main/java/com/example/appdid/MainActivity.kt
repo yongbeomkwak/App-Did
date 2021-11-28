@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -258,7 +259,12 @@ class MainActivity : AppCompatActivity() {
             setOnItemSelectedListener { item ->
                 when(item.itemId) {
                     R.id.item_calendar -> {
+                        if (MyApplication.prefs.getString("update").equals("update")) {
+                            MyApplication.prefs.setString("update", "done")
+                            loadNewAdapter()
+                        }
                         view_pager2.currentItem = 0
+
                     }
                     R.id.item_todo -> {
                         view_pager2.currentItem = 1
@@ -267,19 +273,6 @@ class MainActivity : AppCompatActivity() {
                 true
             }
         }
-
-//        view_pager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
-//            override fun onPageSelected(position: Int) {
-//                super.onPageSelected(position)
-//                if (MyApplication.prefs.getString("update").equals("update")) {
-//                    MyApplication.prefs.setString("update", "done")
-//                    Log.e("WOW", "UPDATE")
-//                    loadNewAdapter()
-//                } else {
-//                    Log.e("WOW", MyApplication.prefs.getString("update"))
-//                }
-//            }
-//        })
     }
 
 
@@ -533,6 +526,7 @@ class MainActivity : AppCompatActivity() {
                     MyApplication.TeamInfo=payload.payloads[0].userGroupDTOS
                     groupId=payload.payloads[0].userGroupDTOS[0]._id //개인 그룹으로 초기
                     MyApplication.prefs.setString("groupId", groupId)
+                    binding.incAppBar.appBar.title = payload.payloads[0].userGroupDTOS[0].groupName
 
                 }
             }
@@ -558,6 +552,7 @@ class MainActivity : AppCompatActivity() {
             Log.e("WOW" ,expandableListAdapter.getGroup(groupPosition)._id + ", " + expandableListAdapter.getGroup(groupPosition).groupName)
             groupId=expandableListAdapter.getGroup(groupPosition)._id
             MyApplication.prefs.setString("groupId", groupId)
+            binding.incAppBar.appBar.title = expandableListAdapter.getGroup(groupPosition).groupName
             closeDrawer()
 
 
