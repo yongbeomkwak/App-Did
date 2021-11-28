@@ -84,32 +84,47 @@ class AddTodoActivity : AppCompatActivity() {
         buttonAdd = binding.buttonAddTodo
         buttonAdd.setOnClickListener {
             //보낼 데이터 , beginData,endDate,제목,색깔,프로젝트 \
-            val call:Call<CodeMessageDTO> =service.postProject(mapOf(
-                    "userId" to MyApplication.prefs.getString("id"),
-                    "beginDate" to beginDate,
-                    "endDate" to endDate,
-                    "color" to toDoColor,
-                    "title" to edittextTitle.text.toString(),
-                    "projectId" to projectCode,
-                    "groupId" to teamId
-            ),MyApplication.prefs.getString("token"))
+            try {
+                if (beginDate > endDate) {
+                    beginDate = endDate.also { endDate = beginDate }
+                }
+                val call: Call<CodeMessageDTO> = service.postProject(
+                    mapOf(
+                        "userId" to MyApplication.prefs.getString("id"),
+                        "beginDate" to beginDate,
+                        "endDate" to endDate,
+                        "color" to toDoColor,
+                        "title" to edittextTitle.text.toString(),
+                        "projectId" to projectCode,
+                        "groupId" to teamId
+                    ), MyApplication.prefs.getString("token")
+                )
 
-            call.enqueue(object :Callback<CodeMessageDTO>{
-                override fun onResponse(call: Call<CodeMessageDTO>, response: Response<CodeMessageDTO>) {
+                call.enqueue(object : Callback<CodeMessageDTO> {
+                    override fun onResponse(
+                        call: Call<CodeMessageDTO>,
+                        response: Response<CodeMessageDTO>
+                    ) {
 
-                    if(response.isSuccessful)
-                    {
-                        Toast.makeText(applicationContext,response.body()!!.message,Toast.LENGTH_SHORT).show()
-                        val intent = Intent()
-                        setResult(RESULT_OK, intent)
-                        finish()
+                        if (response.isSuccessful) {
+                            Toast.makeText(
+                                applicationContext,
+                                response.body()!!.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val intent = Intent()
+                            setResult(RESULT_OK, intent)
+                            finish()
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<CodeMessageDTO>, t: Throwable) {
-                    //
-                }
-            })
+                    override fun onFailure(call: Call<CodeMessageDTO>, t: Throwable) {
+                        //
+                    }
+                })
+            } catch (e: Exception) {
+                Toast.makeText(applicationContext, "올바른 정보를 입력해주세요", Toast.LENGTH_LONG).show()
+            }
 
 
             //보낸 후
