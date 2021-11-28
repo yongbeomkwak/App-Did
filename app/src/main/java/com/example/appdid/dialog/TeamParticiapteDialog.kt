@@ -61,7 +61,7 @@ class TeamParticiapteDialog(private val context: Context) {
 
             dialog.setOnDismissListener(object: DialogInterface.OnDismissListener {
                 override fun onDismiss(dialog: DialogInterface?) {
-                    (context as MainActivity).reFreshTeamList()
+                    (context as MainActivity).reFreshTeamList(false)
                 }
 
             })
